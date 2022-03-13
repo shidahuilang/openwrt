@@ -14,11 +14,11 @@ on:
         default: 'ssh-actions'
       days:
         description: '清理[X]天之前的Actions空间操作记录(可改)'
-        required: true
+        required: false
         default: '7'
       rele:
         description: '保留[X]个Releases不被删除(可改)'
-        required: true
+        required: false
         default: '10'
 
 

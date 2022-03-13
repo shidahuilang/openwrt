@@ -14,12 +14,12 @@ on:
         default: 'ssh-actions'
       days:
         description: '清理[X]天之前的Actions空间操作记录(可改)'
-        required: true
-        default: '7'
+        required: false
+        default: '27'
       rele:
         description: '保留[X]个Releases不被删除(可改)'
-        required: true
-        default: '10'
+        required: false
+        default: '30'
 
 
 # 定时触发开启开始编译(把下面两个#去掉开启,时间设置请看定时开启编译说明)

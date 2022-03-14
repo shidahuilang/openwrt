@@ -15,7 +15,7 @@ cd openwrt && make menuconfig
 - TG通知Settings->Secrets中添加个名字为TELEGRAM_BOT_TOKEN和TELEGRAM_CHAT_ID
 
 ## 自动更新固件
-首先需要打开 Openwrt 主页,点击系统-TTYD 终端或命令窗,或者使用putty按需输入下方指令:
+首先需要打开 Openwrt 主页,点击系统-TTYD 终端或命令窗,或者使用putty输入openwrt即可进入升级菜单
 
  bash /bin/AutoBuild_Tools.sh
 1. USB 空间扩展------6. 环境修复

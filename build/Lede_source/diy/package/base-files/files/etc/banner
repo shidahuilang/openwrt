@@ -7,7 +7,7 @@
              
       OpenWrt AutoBuild by DaHuiLang
  -----------------------------------------------------
-      %D %V %C  Lede_x86_64
-      update   bash /bin/AutoUpdate.sh
+      update   openwrt
+               bash /bin/AutoUpdate.sh
                bash /bin/AutoBuild_Tools.sh
  -----------------------------------------------------

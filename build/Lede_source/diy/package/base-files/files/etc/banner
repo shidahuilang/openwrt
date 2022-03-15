@@ -6,8 +6,8 @@
           |__| 
              
       OpenWrt AutoBuild by DaHuiLang
+           LEDE-X86-64
  -----------------------------------------------------
-      update   openwrt
-               bash /bin/AutoUpdate.sh
-               bash /bin/AutoBuild_Tools.sh
+       update----->openwrt
+       tool------->tools
  -----------------------------------------------------

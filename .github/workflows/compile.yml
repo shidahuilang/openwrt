@@ -16,7 +16,7 @@ on:
     branches:
       - main
     paths:
-      - 'config'
+      - 'build/Lede_source/start-up/start'
 
 env:
   Github: https://github.com/${{github.repository}}
@@ -67,7 +67,7 @@ jobs:
         echo "Library=${Warehouse##*/}" >> $GITHUB_ENV
         echo "matrixtarget=${{matrix.target}}" >> $GITHUB_ENV
     
-    - name: 部署编译
+    - name: 部署环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -78,15 +78,15 @@ jobs:
         sudo -E apt-get -qq autoremove -y --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
-        if [[ "${Modelfile}" == "openwrt_amlogic" ]]; then
+        sudo mkdir -p /${{matrix.target}}
+        sudo chown $USER:$GROUPS /${{matrix.target}}
+        if [[ "${{matrix.target}}" == "openwrt_amlogic" ]]; then
             docker rmi $(docker images -q)
             sudo -E apt-get remove -y --purge azure-cli ghc zulu* hhvm llvm* firefox google* dotnet* powershell mysql* php* mssql-tools msodbcsql17 android*
             sudo rm -rf /etc/mysql /etc/php /swapfile
         fi
         
-    - name: 电报通知
+    - name: 信息通知
       if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TG'
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "TG" ]]; then
@@ -96,19 +96,19 @@ jobs:
         fi
     
     - name: 下载"${{matrix.target}}"源码
-      working-directory: /workdir
+      working-directory: /${{matrix.target}}
       run: |
-        git clone --depth 1 -b main https://github.com/281677160/common ${GITHUB_WORKSPACE}/build/common
-        mv -f ${GITHUB_WORKSPACE}/build/common/*.sh ${GITHUB_WORKSPACE}/build/${matrixtarget}/
+        git clone --depth 1 -b main https://github.com/shidahuilang/common ${GITHUB_WORKSPACE}/build/common
+        mv -f ${GITHUB_WORKSPACE}/build/common/*.sh ${GITHUB_WORKSPACE}/build/${{matrix.target}}/
         chmod -R +x ${GITHUB_WORKSPACE}/build
         git clone -b "$REPO_BRANCH" --single-branch "$REPO_URL" openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        ln -sf /${{matrix.target}}/openwrt $GITHUB_WORKSPACE/openwrt
     
-    - name: 公 告
+    - name: 公告公告
       run: |
         cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt
-        source ${GITHUB_WORKSPACE}/build/${matrixtarget}/common.sh && Diy_variable
-        source ${GITHUB_WORKSPACE}/build/${matrixtarget}/common.sh && Diy_Notice
+        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_variable
+        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_Notice
  
     - name: 加载补丁
       run: |
@@ -150,15 +150,16 @@ jobs:
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
+        echo "::set-output name=status::success"
     
-    - name: 开始编译
+    - name: 编译固件
       id: compile
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
         make -j$(nproc) || make -j1 V=s
-        echo "::set-output name=status::success"
         echo "date=$(date "+%Y%m%d%H%M%S")" >> $GITHUB_ENV
+        echo "::set-output name=status::success"
     
     - name: 上传文件
       continue-on-error: true
@@ -183,7 +184,7 @@ jobs:
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
         
-    - name: 上传固件
+    - name: 上传固件 github actions
       continue-on-error: true
       if: steps.organizer.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true'
       uses: actions/upload-artifact@v2
@@ -249,7 +250,7 @@ jobs:
         overwrite: true
         file_glob: true
 
-    - name: 电报通知
+    - name: 信息通知
       if: steps.compile.outputs.status == 'success' && env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || steps.compile.outputs.status == 'success' && env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TG'
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "TG" ]]; then

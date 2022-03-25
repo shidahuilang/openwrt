@@ -24,9 +24,9 @@ on:
 env:
   BILDYML: R2s.yml
   
-  # 多开build-openwrt.yml时把上面build-openwrt.yml同步改成你新建立的文件名称
-  # 比如你新建立的文件叫x86-openwrt.yml，你就把BILDYML: build-openwrt.yml改成BILDYML: x86-openwrt.yml
-  # 多开build-openwrt.yml时，要把最上面的‘触发compile启动编译’也随便改一下，不重覆就可以了
+  # 多开R2s.yml时把上面R2s.yml同步改成你新建立的文件名称
+  # 比如你新建立的文件叫x86-openwrt.yml，你就把BILDYML: R2s.yml改成BILDYML: x86-openwrt.yml
+  # 多开R2s.yml时，要把最上面的‘触发compile启动编译’也随便改一下，不重覆就可以了
 
   Github: https://github.com/${{github.repository}}
   Author: ${{github.actor}}
@@ -110,7 +110,7 @@ jobs:
         
     - name: SSH远程连接（制作.config配置文件）
       if: env.SSH_ACTIONS == 'true' || (github.event.inputs.ssh == 'ssh')
-      uses: danshui-git/debugger-action@master
+      uses: shidahuilang/debugger-action@master
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -131,27 +131,27 @@ jobs:
         name: .config_${{ env.SOURCE }}_${{ env.TARGET_PROFILE }}_${{ env.Firmware_Date }}
         path: config.txt
         
-    - name: 同步上游compile.yml和build-openwrt.yml文件
+    - name: 同步上游compile.yml和R2s.yml文件
       if: steps.compileop.outputs.status == 'success' && env.REPO_TOKEN
       run: |
         cd $GITHUB_WORKSPACE
         git clone -b main https://github.com/shidahuilang/openwrt.git shangyouck
         git clone -b main https://github.com/${{github.repository}}.git repo
         echo "CRON2=$(grep -A 1 'schedule:' $GITHUB_WORKSPACE/.github/workflows/${{env.BILDYML}} |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-        echo "CRON1=$(grep -A 1 'schedule:' shangyouck/.github/workflows/build-openwrt.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+        echo "CRON1=$(grep -A 1 'schedule:' shangyouck/.github/workflows/R2s.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
         if [[ `grep 'cron:' $GITHUB_WORKSPACE/.github/workflows/${{env.BILDYML}} |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
-          sed -i 's/^#\(.*schedule:\)/\1/' shangyouck/.github/workflows/build-openwrt.yml
-          sed -i 's/^#\(.*- cron:\)/\1/' shangyouck/.github/workflows/build-openwrt.yml
+          sed -i 's/^#\(.*schedule:\)/\1/' shangyouck/.github/workflows/R2s.yml
+          sed -i 's/^#\(.*- cron:\)/\1/' shangyouck/.github/workflows/R2s.yml
         fi
-        echo "TARGET1=$(grep 'target: \[' shangyouck/.github/workflows/build-openwrt.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+        echo "TARGET1=$(grep 'target: \[' shangyouck/.github/workflows/R2s.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
         echo "TARGET2=$(grep 'target: \[' $GITHUB_WORKSPACE/.github/workflows/${{env.BILDYML}}  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
         echo "QIDONG1=$(grep -A 1 'paths:' shangyouck/.github/workflows/compile.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')" >> $GITHUB_ENV
         echo "QIDONG2=- 'build\/${{matrix.target}}\/start-up\/start'" >> $GITHUB_ENV
         echo "TARGE1=$(grep 'target: \[' shangyouck/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
         echo "TARGE2=target: \\[${{matrix.target}}\\]" >> $GITHUB_ENV
-        echo "BEIYONG1=$(grep -A 2 'target:' shangyouck/.github/workflows/build-openwrt.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
+        echo "BEIYONG1=$(grep -A 2 'target:' shangyouck/.github/workflows/R2s.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
         echo "BEIYONG2=$(grep -A 2 'target:' $GITHUB_WORKSPACE/.github/workflows/${{env.BILDYML}} |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
-        echo "QDMAME1=$(sed -n '1,50p' shangyouck/.github/workflows/build-openwrt.yml |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+        echo "QDMAME1=$(sed -n '1,50p' shangyouck/.github/workflows/R2s.yml |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
         echo "QDMAME2=$(sed -n '1,50p' $GITHUB_WORKSPACE/.github/workflows/${{env.BILDYML}} |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
         echo "GONGGAO1=编译${{env.SOURCE}}-${{env.TARGET_PROFILE}}固件" >> $GITHUB_ENV
     
@@ -159,18 +159,18 @@ jobs:
       if: steps.compileop.outputs.status == 'success' && env.REPO_TOKEN
       run: |
         cd $GITHUB_WORKSPACE
-        sed -i "s/BILDYML: build-openwrt.yml/BILDYML: ${{env.BILDYML}}/g" shangyouck/.github/workflows/build-openwrt.yml
+        sed -i "s/BILDYML: R2s.yml/BILDYML: ${{env.BILDYML}}/g" shangyouck/.github/workflows/R2s.yml
         if [[ -n "${{env.QDMAME1}}" ]] && [[ -n "${{env.QDMAME2}}" ]]; then
-          sed -i "s/${{env.QDMAME1}}/${{env.QDMAME2}}/g" shangyouck/.github/workflows/build-openwrt.yml
+          sed -i "s/${{env.QDMAME1}}/${{env.QDMAME2}}/g" shangyouck/.github/workflows/R2s.yml
         fi
         if [[ -n "${{env.BEIYONG1}}" ]] && [[ -n "${{env.BEIYONG2}}" ]]; then
-          sed -i "s/${{env.BEIYONG1}}/${{env.BEIYONG2}}/g" shangyouck/.github/workflows/build-openwrt.yml
+          sed -i "s/${{env.BEIYONG1}}/${{env.BEIYONG2}}/g" shangyouck/.github/workflows/R2s.yml
         fi
         if [[ -n "${{env.CRON1}}" ]] && [[ -n "${{env.CRON2}}" ]]; then
-          sed -i "s/${{env.CRON1}}/${{env.CRON2}}/g" shangyouck/.github/workflows/build-openwrt.yml
+          sed -i "s/${{env.CRON1}}/${{env.CRON2}}/g" shangyouck/.github/workflows/R2s.yml
         fi
         if [[ -n "${{env.TARGET1}}" ]] && [[ -n "${{env.TARGET2}}" ]]; then
-          sed -i "s/${{env.TARGET1}}/${{env.TARGET2}}/g" shangyouck/.github/workflows/build-openwrt.yml
+          sed -i "s/${{env.TARGET1}}/${{env.TARGET2}}/g" shangyouck/.github/workflows/R2s.yml
         fi
         if [[ -n "${{env.TARGE1}}" ]] && [[ -n "${{env.TARGE2}}" ]]; then
           sed -i "s/${{env.TARGE1}}/${{env.TARGE2}}/g" shangyouck/.github/workflows/compile.yml
@@ -193,7 +193,7 @@ jobs:
         fi
         cp -Rf $GITHUB_WORKSPACE/shangyouck/.github/workflows/synchronization.yml .github/workflows/synchronization.yml
         git rm -rf $GITHUB_WORKSPACE/repo/.github/workflows/${{env.BILDYML}}
-        cp -Rf $GITHUB_WORKSPACE/shangyouck/.github/workflows/build-openwrt.yml .github/workflows/${{env.BILDYML}}
+        cp -Rf $GITHUB_WORKSPACE/shangyouck/.github/workflows/R2s.yml .github/workflows/${{env.BILDYML}}
         mkdir -p build/${{matrix.target}}/start-up
         echo "${{env.SOURCE}}于$(date +%Y年%m月%d号%H时%M分%S秒)自动触发编译${{env.TARGET_PROFILE}}固件" > build/${{matrix.target}}/start-up/start
         git add .

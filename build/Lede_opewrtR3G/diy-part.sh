@@ -3,21 +3,28 @@
 # DIY扩展二合一了，在此处可以增加插件
 #
 
-sed -i "/uci commit fstab/a\uci commit network" $ZZZ
-sed -i "/uci commit network/i\uci set network.lan.ipaddr='192.168.2.10'" $ZZZ                      # IPv4 地址(openwrt后台地址)
-sed -i "/uci commit network/i\uci set network.lan.netmask='255.255.255.0'" $ZZZ                   # IPv4 子网掩码
-sed -i "/uci commit network/i\uci set network.lan.gateway='192.168.2.10'" $ZZZ                     # IPv4 网关
-sed -i "/uci commit network/i\uci set network.lan.broadcast='192.168.2.255'" $ZZZ                 # IPv4 广播
-sed -i "/uci commit network/i\uci set network.lan.dns='114.114.114.114 223.5.5.5'" $ZZZ           # DNS(多个DNS要用空格分开)
-#sed -i "/uci commit network/i\uci set network.lan.delegate='0'" $ZZZ                              # 去掉LAN口使用内置的 IPv6 管理
+cat >$NETIP <<-EOF
+uci set network.lan.ipaddr='192.168.2.1'                                    # IPv4 地址(openwrt后台地址)
+uci set network.lan.netmask='255.255.255.0'                                 # IPv4 子网掩码
+uci set network.lan.gateway='192.168.2.1'                                   # IPv4 网关
+uci set network.lan.broadcast='192.168.2.255'                               # IPv4 广播
+uci set network.lan.dns='223.5.5.5 114.114.114.114'                         # DNS(多个DNS要用空格分开)
+uci set network.lan.delegate='0'                                            # 去掉LAN口使用内置的 IPv6 管理
+uci commit network                                                          # 不要删除跟注释,除非上面全部删除或注释掉了
+uci set dhcp.lan.ignore='1'                                                 # 关闭DHCP功能（去掉uci前面的#生效）
+uci commit dhcp                                                             # 跟‘关闭DHCP功能’联动,同时启用或者删除跟注释（去掉uci前面的#生效）
+uci set system.@system[0].hostname='OpenWrt'                            # 修改主机名称为OpenWrt-123
+#sed -i 's/\/bin\/login/\/bin\/login -f root/' /etc/config/ttyd              # 设置ttyd免帐号登录，如若开启，进入OPENWRT后可能要重启一次才生效（去掉uci前面的#生效）
+EOF
 
-sed -i 's/luci-theme-bootstrap/luci-theme-opentomcat/g' feeds/luci/collections/luci/Makefile           # 选择argon为默认主题
 
-sed -i "s/OpenWrt /大灰狼  $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ          # 增加个性名字${Author}默认为你的github账号
+sed -i 's/luci-theme-bootstrap/luci-theme-opentomcat/g' feeds/luci/collections/luci/Makefile             # 选择argon为默认主题
 
-sed -i "/uci commit system/i\uci set system.@system[0].hostname='DHL-OpenWrt'" $ZZZ               # 修改主机名称为OpenWrt-123
+sed -i "s/OpenWrt /大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PATH       # 增加个性名字 ${Author} 默认为你的github帐号
 
-sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ                                                            # 设置密码为空
+sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH                                                         # 设置密码为空
+
+# sed -i '/to-ports 53/d' $ZZZ_PATH                                                                   # 删除默认防火墙
 
 #sed -i 's/PATCHVER:=5.4/PATCHVER:=5.10/g' target/linux/ramips/Makefile                              # 默认内核5.10，修改内核为5.4
 curl -fsSL  https://raw.githubusercontent.com/281677160/openwrt-package/usb/block/10-mount > files/etc/hotplug.d/block/10-mount

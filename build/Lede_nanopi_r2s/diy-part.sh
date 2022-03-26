@@ -30,7 +30,7 @@ sed -i "s/OpenWrt /大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PAT
 
 sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH                                                         # 设置密码为空
 
-sed -i '/to-ports 53/d' $ZZZ_PATH                                                                   # 删除默认防火墙
+# sed -i '/to-ports 53/d' $ZZZ_PATH                                                                   # 删除默认防火墙
 
 sed -i 's/PATCHVER=5.4/PATCHVER=5.15/g' target/linux/rockchip/Makefile                             # x86机型,默认内核5.15，修改内核为5.10（去掉sed前面的#生效）
 

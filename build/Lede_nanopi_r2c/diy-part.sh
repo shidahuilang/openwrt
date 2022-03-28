@@ -47,4 +47,5 @@ rm -rf feeds.buildinfo
 rm -rf sha256sums
 rm -rf version.buildinfo
 rm -rf manifest
+rm -rf armv8-friendlyarm_nanopi-r2c.manifest
 EOF

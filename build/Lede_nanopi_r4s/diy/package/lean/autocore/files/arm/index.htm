@@ -60,7 +60,8 @@
 			ethinfo    = eth_info,
 			userinfo    = user_info,
 			uptime     = sysinfo.uptime or 0,
-			localtime  = os.date("%Y-%m-%d") .. " " .. translate(os.date("%A")) .. " " .. os.date("%X"),			loadavg    = sysinfo.load or { 0, 0, 0 },
+			localtime  = os.date("%Y-%m-%d") .. " " .. translate(os.date("%A")) .. " " .. os.date("%X"),
+			loadavg    = sysinfo.load or { 0, 0, 0 },
 			memory     = meminfo,
 			memcached  = mem_cached,
 			swap       = swapinfo,
@@ -68,7 +69,8 @@
 			conncount  = conn_count,
 			leases     = stat.dhcp_leases(),
 			leases6    = stat.dhcp6_leases(),
-			wifinets   = stat.wifi_networks()		}
+			wifinets   = stat.wifi_networks()
+		}
 
 		if wan then
 			rv.wan = {
@@ -723,8 +725,8 @@
 		<tr><td width="33%"><%:Model%></td><td><%=pcdata(boardinfo.model or "?")%> <%=luci.sys.exec("cat /etc/bench.log") or " "%></td></tr>
 		<tr><td width="33%"><%:CPU Info%></td><td id="cpuinfo">-</td></tr>
 		<tr><td width="33%"><%:Firmware Version%></td><td>
-			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
-			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
+			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%><!-- /
+			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)-->
 		</td></tr>
 		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
@@ -765,6 +767,7 @@
 
 <fieldset class="cbi-section">
 	<legend><%:Network%></legend>
+
 	<table width="100%" cellspacing="10">
 		<tr><td width="33%" style="vertical-align:top"><%:IPv4 WAN Status%></td><td>
 			<table><tr>

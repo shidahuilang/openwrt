@@ -11,7 +11,11 @@ cd openwrt && make menuconfig
 - 结束ctrl+d
 
 - 云编译需要 [在此](https://github.com/settings/tokens) 创建个token,勾选：repo, workflow，保存所得的key
-- 然后在此仓库Settings->Secrets中添加个名字为REPO_TOKEN的Secret,填入token获得的key
+- 然后在此仓库Settings->Secrets中添加个名字为
+``` bash
+REPO_TOKEN
+```
+的Secret,填入token获得的key
 - TG通知Settings->Secrets中添加个名字为TELEGRAM_BOT_TOKEN和TELEGRAM_CHAT_ID
 
 ## 自动更新固件

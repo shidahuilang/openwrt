@@ -20,7 +20,7 @@ uci set network.ipv6.proto='dhcpv6'                                         #开
 uci set network.ipv6.ifname='@lan'                                          #开启dhcpipv6                                    
 uci set network.ipv6.reqaddress='try'                                       #开启dhcpipv6                                  
 uci set network.ipv6.reqprefix='auto'                                       #开启dhcpipv6  
-uci set network.lan.delegate='0'                                            # 去掉LAN口使用内置的 IPv6 管理
+#uci set network.lan.delegate='0'                                            # 去掉LAN口使用内置的 IPv6 管理
 uci commit network                                                          # 不要删除跟注释,除非上面全部删除或注释掉了
 uci set dhcp.lan.ignore='1'                                                 # 关闭DHCP功能（去掉uci前面的#生效）
 uci commit dhcp                                                             # 跟‘关闭DHCP功能’联动,同时启用或者删除跟注释（去掉uci前面的#生效）

@@ -19,7 +19,8 @@ uci set network.ipv6=interface                                              #创
 uci set network.ipv6.proto='dhcpv6'                                         #开启dhcpipv6                                      
 uci set network.ipv6.ifname='@lan'                                          #开启dhcpipv6                                    
 uci set network.ipv6.reqaddress='try'                                       #开启dhcpipv6                                  
-uci set network.ipv6.reqprefix='auto'                                       #开启dhcpipv6  
+uci set network.ipv6.reqprefix='auto'                                       #开启dhcpipv6
+uci set firewall.@zone[0].network='lan ipv6'                                #连接ipv6到lan口
 #uci set network.lan.delegate='0'                                            # 去掉LAN口使用内置的 IPv6 管理
 uci commit network                                                          # 不要删除跟注释,除非上面全部删除或注释掉了
 uci set dhcp.lan.ignore='1'                                                 # 关闭DHCP功能（去掉uci前面的#生效）

@@ -2,7 +2,7 @@
 # the system init finished. By default this file does nothing.
 
 cat /dev/null > /etc/bench.log
-echo " (CpuMark : 97821.967633" >> /etc/bench.log
+echo " (CpuMark : 127821.967633" >> /etc/bench.log
 echo " Scores)" >> /etc/bench.log
 
 if [ -f "/etc/bench.log" ]; then

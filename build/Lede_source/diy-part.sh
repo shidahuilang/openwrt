@@ -74,6 +74,5 @@ rm -rf openwrt-x86-64-generic-kernel.bin
 rm -rf openwrt-x86-64-generic.manifest
 rm -rf openwrt-x86-64-generic-squashfs-rootfs.img.gz
 rm -rf sha256sums
-rm -rf openwrt-x86-64-uefi.img.gz
 rm -rf version.buildinfo
 EOF

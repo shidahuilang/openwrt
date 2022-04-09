@@ -18,9 +18,10 @@ cd openwrt && make menuconfig
 ## 自动更新固件
 ![img.png](img/img.png)
 ![img1.png](img/img1.png)
-首先需要打开 Openwrt 主页,点击系统-TTYD 终端或命令窗,或者使用putty
-输入openwrt即可进入固件升级菜单
-输入 tools 即可打开工具箱
+
+- 首先需要打开 Openwrt 主页,点击系统-TTYD 终端或命令窗,或者使用putty
+- 输入```openwrt```即可进入固件升级菜单
+- 输入```tools```即可打开工具箱
 1. USB 空间扩展------6. 环境修复
 2. Samba 设置------- 7. 系统信息监控
 3. 端口占用列表-------8. 在线设备列表

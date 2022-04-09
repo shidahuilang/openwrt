@@ -8,32 +8,28 @@ on:
         default: 'ssh-actions'
       days:
         description: '清理[X]天之前的Actions空间操作记录(可改)'
-        required: false
-        default: '37'
+        required: true
+        default: '7'
       rele:
         description: '保留[X]个Releases不被删除(可改)'
-        required: false
-        default: '30'
+        required: true
+        default: '10'
 
 
 # 定时触发开启开始编译(把下面两个#去掉开启,时间设置请看定时开启编译说明)
-  schedule:
-   - cron: 0 3 */2 * *
-
+#  schedule:
+#   - cron: 0 3 */2 * *
 
 env:
-  BILDYML: X86.yml
-  
-  # 多开X86.yml时把上面X86.yml同步改成你新建立的文件名称
-  # 比如你新建立的文件叫x86.yml，你就把BILDYML: X86.yml改成BILDYML: x86.yml
-  # 多开X86.yml时，要把最上面的‘触发compile启动编译’也随便改一下，不重覆就可以了
-
   Github: https://github.com/${{github.repository}}
   Author: ${{github.actor}}
   Warehouse: ${{github.repository}}
   Run_number: ${{github.run_number}}
   Run_workflow: ${{github.workflow}}
   REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+  SCKEY: ${{ secrets.SCKEY }}
+  PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
+  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
   TZ: Asia/Shanghai
 
@@ -75,13 +71,23 @@ jobs:
         echo "Library=${Warehouse##*/}" >> $GITHUB_ENV
         echo "matrixtarget=${{matrix.target}}" >> $GITHUB_ENV
         
+    - name: 定时启动编译时清理Actions空间和删除releases数值设置
+      run: |
+         if [[ -z "${{ github.event.inputs.days }}" ]] && [[ -z "${{ github.event.inputs.rele }}" ]]; then
+           echo "retain_days=7" >> $GITHUB_ENV
+           echo "keep_latest=10" >> $GITHUB_ENV
+         else
+           echo "retain_days=${{ github.event.inputs.days }}" >> $GITHUB_ENV
+           echo "keep_latest=${{ github.event.inputs.rele }}" >> $GITHUB_ENV
+         fi
+        
     - name: 部署编译环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo -E apt-get -qq update -y
         sudo -E apt-get -qq full-upgrade -y
-        sudo -E apt-get -qq install -y subversion build-essential libncurses5-dev openssl libssl-dev zlib1g-dev gawk git ccache gettext libssl-dev xsltproc zip git-core wget curl grep > /dev/null 2>&1
+        sudo -E apt-get -qq install -y gawk git ccache gettext libssl-dev xsltproc zip git-core wget curl grep
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /${{matrix.target}}
         sudo chown $USER:$GROUPS /${{matrix.target}}
@@ -89,6 +95,8 @@ jobs:
         git config --global user.name "github-actions[bot]"
     
     - name: 下载"${{matrix.target}}"源码
+      id: clone
+      continue-on-error: true
       working-directory: /${{matrix.target}}
       run: |
         git clone --depth 1 -b main https://github.com/shidahuilang/common ${GITHUB_WORKSPACE}/build/common
@@ -98,12 +106,15 @@ jobs:
         ln -sf /${{matrix.target}}/openwrt $GITHUB_WORKSPACE/openwrt
  
     - name: 公 告
+      continue-on-error: true
       run: |
         cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_variable
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_Notice
  
     - name: 加载源,补丁和自定义设置
+      id: compile
+      continue-on-error: true
       run: |
         cd openwrt
         source $BUILD_PATH/common.sh && Diy_menu
@@ -116,89 +127,63 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
     - name: 生成"${{matrix.target}}"配置文件
-      id: compileop
+      continue-on-error: true
       run: |
         cd openwrt
         source $BUILD_PATH/common.sh && Diy_menu2
         ./scripts/diffconfig.sh > ${GITHUB_WORKSPACE}/${CONFIG_FILE}
         cp -Rf ${GITHUB_WORKSPACE}/${CONFIG_FILE} ${GITHUB_WORKSPACE}/config.txt
-        echo "::set-output name=status::success"
         
     - name: 上传.config配置文件在 github actions
+      continue-on-error: true
       if: env.UPLOAD_CONFIG == 'true'
       uses: actions/upload-artifact@v2
       with:
         name: .config_${{ env.SOURCE }}_${{ env.TARGET_PROFILE }}_${{ env.Firmware_Date }}
         path: config.txt
-        
-    - name: 同步上游compile.yml和X86.yml文件
-      if: steps.compileop.outputs.status == 'success' && env.REPO_TOKEN
-      run: |
-        cd $GITHUB_WORKSPACE
-        git clone -b main https://github.com/shidahuilang/openwrt.git shangyouck
-        git clone -b main https://github.com/${{github.repository}}.git repo
-        echo "CRON2=$(grep -A 1 'schedule:' $GITHUB_WORKSPACE/.github/workflows/${{env.BILDYML}} |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-        echo "CRON1=$(grep -A 1 'schedule:' shangyouck/.github/workflows/X86.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-        if [[ `grep 'cron:' $GITHUB_WORKSPACE/.github/workflows/${{env.BILDYML}} |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
-          sed -i 's/^#\(.*schedule:\)/\1/' shangyouck/.github/workflows/X86.yml
-          sed -i 's/^#\(.*- cron:\)/\1/' shangyouck/.github/workflows/X86.yml
-        fi
-        echo "TARGET1=$(grep 'target: \[' shangyouck/.github/workflows/X86.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-        echo "TARGET2=$(grep 'target: \[' $GITHUB_WORKSPACE/.github/workflows/${{env.BILDYML}}  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-        echo "QIDONG1=$(grep -A 1 'paths:' shangyouck/.github/workflows/compile.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')" >> $GITHUB_ENV
-        echo "QIDONG2=- 'build\/${{matrix.target}}\/start-up\/start'" >> $GITHUB_ENV
-        echo "TARGE1=$(grep 'target: \[' shangyouck/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-        echo "TARGE2=target: \\[${{matrix.target}}\\]" >> $GITHUB_ENV
-        echo "BEIYONG1=$(grep -A 2 'target:' shangyouck/.github/workflows/X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
-        echo "BEIYONG2=$(grep -A 2 'target:' $GITHUB_WORKSPACE/.github/workflows/${{env.BILDYML}} |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
-        echo "QDMAME1=$(sed -n '1,50p' shangyouck/.github/workflows/X86.yml |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-        echo "QDMAME2=$(sed -n '1,50p' $GITHUB_WORKSPACE/.github/workflows/${{env.BILDYML}} |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-        echo "GONGGAO1=编译${{env.SOURCE}}-${{env.TARGET_PROFILE}}固件" >> $GITHUB_ENV
     
     - name: 触发compile.yml启动"${{matrix.target}}"编译
-      if: steps.compileop.outputs.status == 'success' && env.REPO_TOKEN
+      id: gitpush
+      continue-on-error: true
+      if: steps.clone.outcome == 'success' && steps.compile.outcome == 'success' && env.REPO_TOKEN
       run: |
         cd $GITHUB_WORKSPACE
-        sed -i "s/BILDYML: X86.yml/BILDYML: ${{env.BILDYML}}/g" shangyouck/.github/workflows/X86.yml
-        if [[ -n "${{env.QDMAME1}}" ]] && [[ -n "${{env.QDMAME2}}" ]]; then
-          sed -i "s/${{env.QDMAME1}}/${{env.QDMAME2}}/g" shangyouck/.github/workflows/X86.yml
+        git clone -b main https://github.com/${{github.repository}}.git ${{matrix.target}}
+        export TARGE1="$(grep 'target: \[' ${{matrix.target}}/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')"
+        export TARGE2="target: \\[${{matrix.target}}\\]"
+        export QIDONG1="$(grep -A 1 'paths:' ${{matrix.target}}/.github/workflows/compile.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')"
+        export QIDONG2="- 'build\/${{matrix.target}}\/start-up\/start'"
+        if [[ -n ${QIDONG1} ]] && [[ -n ${TARGE1} ]]; then
+          sed -i "s/${QIDONG1}/${QIDONG2}/g" ${{matrix.target}}/.github/workflows/compile.yml
+          sed -i "s/${TARGE1}/${TARGE2}/g" ${{matrix.target}}/.github/workflows/compile.yml
         fi
-        if [[ -n "${{env.BEIYONG1}}" ]] && [[ -n "${{env.BEIYONG2}}" ]]; then
-          sed -i "s/${{env.BEIYONG1}}/${{env.BEIYONG2}}/g" shangyouck/.github/workflows/X86.yml
-        fi
-        if [[ -n "${{env.CRON1}}" ]] && [[ -n "${{env.CRON2}}" ]]; then
-          sed -i "s/${{env.CRON1}}/${{env.CRON2}}/g" shangyouck/.github/workflows/X86.yml
-        fi
-        if [[ -n "${{env.TARGET1}}" ]] && [[ -n "${{env.TARGET2}}" ]]; then
-          sed -i "s/${{env.TARGET1}}/${{env.TARGET2}}/g" shangyouck/.github/workflows/X86.yml
-        fi
-        if [[ -n "${{env.TARGE1}}" ]] && [[ -n "${{env.TARGE2}}" ]]; then
-          sed -i "s/${{env.TARGE1}}/${{env.TARGE2}}/g" shangyouck/.github/workflows/compile.yml
-        fi
-        if [[ -n "${{env.QIDONG1}}" ]] && [[ -n "${{env.QIDONG2}}" ]]; then
-          sed -i "s/${{env.QIDONG1}}/${{env.QIDONG2}}/g" shangyouck/.github/workflows/compile.yml
-        fi
-        cp -Rf $GITHUB_WORKSPACE/shangyouck/README.md $GITHUB_WORKSPACE/repo
-        cd repo
-        if [[ -n "$(ls -A "build/${{matrix.target}}/${CONFIG_FILE}" 2>/dev/null)" ]]; then
-          git rm -rf build/${{matrix.target}}/${CONFIG_FILE}
-        fi
-        cp -Rf $GITHUB_WORKSPACE/${CONFIG_FILE} build/${{matrix.target}}/${CONFIG_FILE}
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repo/.github/workflows/compile.yml" 2>/dev/null)" ]]; then
-          git rm -rf $GITHUB_WORKSPACE/repo/.github/workflows/compile.yml
-        fi
-        cp -Rf $GITHUB_WORKSPACE/shangyouck/.github/workflows/compile.yml .github/workflows/compile.yml
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repo/.github/workflows/synchronization.yml" 2>/dev/null)" ]]; then
-          git rm -rf $GITHUB_WORKSPACE/repo/.github/workflows/synchronization.yml
-        fi
-        cp -Rf $GITHUB_WORKSPACE/shangyouck/.github/workflows/synchronization.yml .github/workflows/synchronization.yml
-        git rm -rf $GITHUB_WORKSPACE/repo/.github/workflows/${{env.BILDYML}}
-        cp -Rf $GITHUB_WORKSPACE/shangyouck/.github/workflows/X86.yml .github/workflows/${{env.BILDYML}}
-        mkdir -p build/${{matrix.target}}/start-up
-        echo "${{env.SOURCE}}于$(date +%Y年%m月%d号%H时%M分%S秒)自动触发编译${{env.TARGET_PROFILE}}固件" > build/${{matrix.target}}/start-up/start
+        cp -Rf $GITHUB_WORKSPACE/${CONFIG_FILE} ${{matrix.target}}/build/${{matrix.target}}/${{env.CONFIG_FILE}}
+        mkdir -p ${{matrix.target}}/build/${{matrix.target}}/start-up
+        echo "${{ env.SOURCE }}$(date +%Y年%m月%d号%H时%M分%S秒)" > ${{matrix.target}}/build/${{matrix.target}}/start-up/start
+        cd ${{matrix.target}}
         git add .
-        git commit -m "${{env.GONGGAO1}}"
+        git commit -m "启动${{matrix.target}}编译${{env.TARGET_PROFILE}}固件"
         git push --force "https://${{ secrets.REPO_TOKEN }}@github.com/${{github.repository}}" HEAD:main
+        
+    - name: 电报机器人或pushplus信息通知
+      if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TG'
+      run: |
+        if [[ "${SERVERCHAN_SCKEY}" == "TG" ]]; then
+          if [[ "${{steps.clone.outcome}}" == 'success' ]] && [[ "${{steps.gitpush.outcome}}" == 'success' ]] && [[ "${{steps.compile.outcome}}" == 'success' ]]; then
+            curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.Tongzhi_Date}})" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          else
+            curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=💥主人❌ ：上游扩展错误或者脚本错误,触发启动【${{matrix.target}}】失败,请点击触发脚本步骤查看详情!(${{env.Tongzhi_Date}})" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+            exit 1
+          fi
+        fi
+        if [[ "${SERVERCHAN_SCKEY}" == "PUSH" ]]; then
+          if [[ "${{steps.clone.outcome}}" == 'success' ]] && [[ "${{steps.gitpush.outcome}}" == 'success' ]] && [[ "${{steps.compile.outcome}}" == 'success' ]]; then
+            curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="开始编译【${{matrix.target}}】" --data "content=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.Tongzhi_Date}})" "http://www.pushplus.plus/send"
+          else
+            curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="触发启动失败" --data "content=💥主人❌ ：上游扩展错误或者脚本错误,触发启动【${{matrix.target}}】失败,请点击触发脚本步骤查看详情!(${{env.Tongzhi_Date}})" "http://www.pushplus.plus/send"
+            exit 1
+          fi
+        fi
         
     - name: 编译信息
       continue-on-error: true
@@ -208,5 +193,21 @@ jobs:
         source $BUILD_PATH/upgrade.sh && GET_TARGET_INFO
         source $BUILD_PATH/common.sh && Diy_xinxi
     
-
-
+    - name: 清理Actions空间
+      if: env.REPO_TOKEN
+      uses: Mattraks/delete-workflow-runs@main
+      with:
+          token: ${{ secrets.REPO_TOKEN }}
+          repository: ${{ github.repository }}
+          keep_minimum_runs: 0
+          retain_days: ${{ env.retain_days }}
+    
+    - name: 删除releases
+      if: env.REPO_TOKEN
+      uses: dev-drprasad/delete-older-releases@master
+      with:
+        repo: ${{ github.repository }}
+        keep_latest: ${{ env.keep_latest }}
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}

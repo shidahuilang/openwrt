@@ -16,7 +16,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/Lede_source/start-up/start'
+      - 'Config'
 
 env:
   Github: https://github.com/${{github.repository}}
@@ -48,7 +48,7 @@ jobs:
     - name: 准备结束
       uses: actions/checkout@v2
 
-    - name: 读取脚本设置
+    - name: 读取脚本
       run: |
         source "${GITHUB_WORKSPACE}/build/${{matrix.target}}/settings.ini"
         echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV
@@ -66,7 +66,7 @@ jobs:
         echo "Library=${Warehouse##*/}" >> $GITHUB_ENV
         echo "matrixtarget=${{matrix.target}}" >> $GITHUB_ENV
     
-    - name: 部署编译环境
+    - name: 部署编译
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -100,24 +100,24 @@ jobs:
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_variable
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_Notice
  
-    - name: 加载源,补丁和自定义设置
+    - name: 加载补丁
       run: |
         cd openwrt
         source $BUILD_PATH/common.sh && Diy_menu
     
-    - name: 缓存加速(7天内对应源码相同机型二次编译有效，每次只保留一个源码的缓存)
+    - name: 缓存加速
       if: env.USE_CACHEWRTBUILD == 'true'
       uses: klever1988/cachewrtbuild@test
       with:
         ccache: 'true'
         prefix: ${{ github.workspace }}/openwrt
 
-    - name: 生成配置文件
+    - name: 生成配置
       run: |
         cd openwrt
         source $BUILD_PATH/common.sh && Diy_menu2
         
-    - name: 启用在线更新
+    - name: 在线更新
       continue-on-error: true
       if: env.REGULAR_UPDATE == 'true' && env.REPO_TOKEN
       run: |
@@ -133,7 +133,7 @@ jobs:
         source $BUILD_PATH/upgrade.sh && GET_TARGET_INFO
         source $BUILD_PATH/common.sh && Diy_xinxi
         
-    - name: 下载软件包
+    - name: 下载软件
       id: package
       run: |
         cd openwrt
@@ -141,7 +141,7 @@ jobs:
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
     
-    - name: 开始编译固件
+    - name: 开始编译
       id: compile
       run: |
         cd openwrt
@@ -149,13 +149,13 @@ jobs:
         make -j$(($(nproc) + 1)) || make -j1 V=s
         echo "date=$(date "+%Y%m%d%H%M%S")" >> $GITHUB_ENV
         
-    - name: 打包晶晨系列固件
+    - name: 打包固件
       continue-on-error: true
       if: steps.compile.outcome == 'success' && env.AUTOMATIC_AMLOGIC == 'true'
       run: |
         cd $GITHUB_WORKSPACE
         source $BUILD_PATH/common.sh && Package_amlogic
-    - name: 整理固件文件夹(需配合diy-part.sh设定使用)
+    - name: 整理固件
       continue-on-error: true
       id: organizer
       run: |
@@ -222,7 +222,7 @@ jobs:
         overwrite: true
         file_glob: true
 
-    - name: 电报机器人或pushplus信息通知
+    - name: 信息通知
       continue-on-error: true
       if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TG'
       run: |

@@ -36,7 +36,7 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 
 
 # 编译多主题时,设置某主题成默认主题（危险操作,你要确定您这里改的主题的名字准确,比如[argon]和肯定编译了该主题,要不然进不了后台）
-sed -i "/exit 0/i\uci set luci.main.mediaurlbase='/luci-static/argon' && uci commit luci" "$BASE_PATH/etc/rc.local"
+#sed -i "/exit 0/i\uci set luci.main.mediaurlbase='/luci-static/argon' && uci commit luci" "$BASE_PATH/etc/rc.local"
 
 
 # 增加个性名字 ${Author} 默认为你的github帐号,修改时候把 ${Author} 替换成你要的
@@ -52,7 +52,7 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 
 
 # 取消路由器每天跑分任务
-#sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"
+sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"
 
 
 # x86机型,默认内核5.15，修改内核为5.10（源码时时变,自行根据target/linux/x86/Makefile文件修改）

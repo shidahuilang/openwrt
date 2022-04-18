@@ -128,20 +128,20 @@ jobs:
         name: .config_${{ env.SOURCE }}_${{ env.TARGET_PROFILE }}_${{ env.Firmware_Date }}
         path: config.txt
     
-    - name: 触发Tianling-X86启动"${{matrix.target}}"编译
+    - name: 触发Tianling-X86.yml启动"${{matrix.target}}"编译
       id: gitpush
       continue-on-error: true
       if: steps.clone.outcome == 'success' && steps.compile.outcome == 'success' && env.REPO_TOKEN
       run: |
         cd $GITHUB_WORKSPACE
         git clone -b main https://github.com/${{github.repository}}.git ${{matrix.target}}
-        export TARGE1="$(grep 'target: \[' ${{matrix.target}}/.github/workflows/Tianling-X86 |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')"
+        export TARGE1="$(grep 'target: \[' ${{matrix.target}}/.github/workflows/Tianling-X86.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')"
         export TARGE2="target: \\[${{matrix.target}}\\]"
-        export QIDONG1="$(grep -A 1 'paths:' ${{matrix.target}}/.github/workflows/Tianling-X86 |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')"
+        export QIDONG1="$(grep -A 1 'paths:' ${{matrix.target}}/.github/workflows/Tianling-X86.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')"
         export QIDONG2="- 'build\/${{matrix.target}}\/start-up\/start'"
         if [[ -n ${QIDONG1} ]] && [[ -n ${TARGE1} ]]; then
-          sed -i "s/${QIDONG1}/${QIDONG2}/g" ${{matrix.target}}/.github/workflows/Tianling-X86
-          sed -i "s/${TARGE1}/${TARGE2}/g" ${{matrix.target}}/.github/workflows/Tianling-X86
+          sed -i "s/${QIDONG1}/${QIDONG2}/g" ${{matrix.target}}/.github/workflows/Tianling-X86.yml
+          sed -i "s/${TARGE1}/${TARGE2}/g" ${{matrix.target}}/.github/workflows/Tianling-X86.yml
         fi
         cp -Rf $GITHUB_WORKSPACE/${CONFIG_FILE} ${{matrix.target}}/build/${{matrix.target}}/${{env.CONFIG_FILE}}
         mkdir -p ${{matrix.target}}/build/${{matrix.target}}/start-up

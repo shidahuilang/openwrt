@@ -1,13 +1,4 @@
-#
-# 同步上游仓库或者清理发布都需要用REPO_TOKEN密匙
-#
-# 记住，同步上游是不会同步您任何自建文件夹的，所以同步后您要自己对比我现有的文件夹里面diy-part.sh和settings.ini文件有没有更新
-#
-# REPO_TOKEN密匙制作教程：https://git.io/jm.md
-#
-
-
-name: 同步大灰狼仓库
+name: 同步上游仓库
 on:
   workflow_dispatch:
     inputs:
@@ -44,7 +35,7 @@ jobs:
       if: env.REPO_TOKEN && (github.event.inputs.again-fork == 'fork')
       run: |
         cd $GITHUB_WORKSPACE
-        git clone -b main https://github.com/shidahuilang/openwrt.git shangyou
+        git clone -b main https://github.com/281677160/build-actions.git shangyou
         git clone -b main https://github.com/${{github.repository}}.git repogx
         if [[ -d repogx/build/Lede_source ]];then
           rm -rf shangyou/build/Lede_source/.config

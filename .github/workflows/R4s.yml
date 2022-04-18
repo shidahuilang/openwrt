@@ -18,7 +18,7 @@ on:
 
 # 定时触发开启开始编译(把下面两个#去掉开启,时间设置请看定时开启编译说明)
 #  schedule:
-#   - cron: 0 3 */4 * *
+#   - cron: 0 9 * * *
 
 env:
   Github: https://github.com/${{github.repository}}
@@ -53,23 +53,12 @@ jobs:
 
     - name: 读取脚本设置
       run: |
-        source "${GITHUB_WORKSPACE}/build/${{matrix.target}}/settings.ini"
-        echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV
-        echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV
-        echo "CONFIG_FILE=${CONFIG_FILE}" >> $GITHUB_ENV
-        echo "DIY_PART_SH=${DIY_PART_SH}" >> $GITHUB_ENV
-        echo "SSH_ACTIONS=${SSH_ACTIONS}" >> $GITHUB_ENV
-        echo "UPLOAD_BIN_DIR=${UPLOAD_BIN_DIR}" >> $GITHUB_ENV
-        echo "UPLOAD_CONFIG=${UPLOAD_CONFIG}" >> $GITHUB_ENV
-        echo "UPLOAD_FIRMWARE=${UPLOAD_FIRMWARE}" >> $GITHUB_ENV
-        echo "UPLOAD_COWTRANSFER=${UPLOAD_COWTRANSFER}" >> $GITHUB_ENV
-        echo "UPLOAD_RELEASE=${UPLOAD_RELEASE}" >> $GITHUB_ENV
-        echo "SERVERCHAN_SCKEY=${SERVERCHAN_SCKEY}" >> $GITHUB_ENV
-        echo "REGULAR_UPDATE=${REGULAR_UPDATE}" >> $GITHUB_ENV
-        echo "USE_CACHEWRTBUILD=${USE_CACHEWRTBUILD}" >> $GITHUB_ENV
-        echo "BY_INFORMATION=${BY_INFORMATION}" >> $GITHUB_ENV
-        echo "Library=${Warehouse##*/}" >> $GITHUB_ENV
-        echo "matrixtarget=${{matrix.target}}" >> $GITHUB_ENV
+        export matrixtarget="${{ matrix.target }}"
+        git clone --depth 1 -b main https://github.com/shidahuilang/common ${GITHUB_WORKSPACE}/build/common
+        mv -f ${GITHUB_WORKSPACE}/build/common/*.sh ${GITHUB_WORKSPACE}/build/${{matrix.target}}/
+        chmod -R +x ${GITHUB_WORKSPACE}/build
+        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_repo_url
+        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_settings
         
     - name: 定时启动编译时清理Actions空间和删除releases数值设置
       run: |
@@ -99,16 +88,13 @@ jobs:
       continue-on-error: true
       working-directory: /${{matrix.target}}
       run: |
-        git clone --depth 1 -b main https://github.com/shidahuilang/common ${GITHUB_WORKSPACE}/build/common
-        mv -f ${GITHUB_WORKSPACE}/build/common/*.sh ${GITHUB_WORKSPACE}/build/${{matrix.target}}/
-        chmod -R +x ${GITHUB_WORKSPACE}/build
         git clone -b "$REPO_BRANCH" --single-branch "$REPO_URL" openwrt
         ln -sf /${{matrix.target}}/openwrt $GITHUB_WORKSPACE/openwrt
  
     - name: 公 告
       continue-on-error: true
       run: |
-        cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt
+        echo
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_variable
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_Notice
  
@@ -121,7 +107,7 @@ jobs:
         
     - name: SSH远程连接（制作.config配置文件）
       if: env.SSH_ACTIONS == 'true' || (github.event.inputs.ssh == 'ssh')
-      uses: shidahuilang/debugger-action@master
+      uses: danshui-git/debugger-action@master
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -142,27 +128,27 @@ jobs:
         name: .config_${{ env.SOURCE }}_${{ env.TARGET_PROFILE }}_${{ env.Firmware_Date }}
         path: config.txt
     
-    - name: 触发compile.yml启动"${{matrix.target}}"编译
+    - name: 触发R4s.yml启动"${{matrix.target}}"编译
       id: gitpush
       continue-on-error: true
       if: steps.clone.outcome == 'success' && steps.compile.outcome == 'success' && env.REPO_TOKEN
       run: |
         cd $GITHUB_WORKSPACE
         git clone -b main https://github.com/${{github.repository}}.git ${{matrix.target}}
-        export TARGE1="$(grep 'target: \[' ${{matrix.target}}/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')"
+        export TARGE1="$(grep 'target: \[' ${{matrix.target}}/.github/workflows/R4s.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')"
         export TARGE2="target: \\[${{matrix.target}}\\]"
-        export QIDONG1="$(grep -A 1 'paths:' ${{matrix.target}}/.github/workflows/compile.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')"
+        export QIDONG1="$(grep -A 1 'paths:' ${{matrix.target}}/.github/workflows/R4s.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')"
         export QIDONG2="- 'build\/${{matrix.target}}\/start-up\/start'"
         if [[ -n ${QIDONG1} ]] && [[ -n ${TARGE1} ]]; then
-          sed -i "s/${QIDONG1}/${QIDONG2}/g" ${{matrix.target}}/.github/workflows/compile.yml
-          sed -i "s/${TARGE1}/${TARGE2}/g" ${{matrix.target}}/.github/workflows/compile.yml
+          sed -i "s/${QIDONG1}/${QIDONG2}/g" ${{matrix.target}}/.github/workflows/R4s.yml
+          sed -i "s/${TARGE1}/${TARGE2}/g" ${{matrix.target}}/.github/workflows/R4s.yml
         fi
         cp -Rf $GITHUB_WORKSPACE/${CONFIG_FILE} ${{matrix.target}}/build/${{matrix.target}}/${{env.CONFIG_FILE}}
         mkdir -p ${{matrix.target}}/build/${{matrix.target}}/start-up
         echo "${{ env.SOURCE }}$(date +%Y年%m月%d号%H时%M分%S秒)" > ${{matrix.target}}/build/${{matrix.target}}/start-up/start
         cd ${{matrix.target}}
         git add .
-        git commit -m "启动编译${{env.TARGET_PROFILE}}固件"
+        git commit -m "启动${{matrix.target}}编译${{env.TARGET_PROFILE}}固件"
         git push --force "https://${{ secrets.REPO_TOKEN }}@github.com/${{github.repository}}" HEAD:main
         
     - name: 电报机器人或pushplus信息通知

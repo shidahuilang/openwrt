@@ -52,7 +52,7 @@ sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH
 
 
 # x86机型,默认内核4.19，修改内核为4.14（根据源码变化,自行在源码target/linux/x86/Makefile文件查看）
-sed -i 's/PATCHVER:=4.19/PATCHVER:=5.10/g' target/linux/x86/Makefile
+#sed -i 's/PATCHVER:=4.19/PATCHVER:=5.14/g' target/linux/x86/Makefile
 
 
 # K3专用，编译K3的时候只会出K3固件（其他机型也适宜,把phicomm-k3替换一下，名字要绝对正确才行）

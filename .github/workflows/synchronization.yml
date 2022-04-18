@@ -1,13 +1,4 @@
-#
-# 同步上游仓库或者清理发布都需要用REPO_TOKEN密匙
-#
-# 记住，同步上游是不会同步您任何自建文件夹的，所以同步后您要自己对比我现有的文件夹里面diy-part.sh和settings.ini文件有没有更新
-#
-# REPO_TOKEN密匙制作教程：https://git.io/jm.md
-#
-
-
-name: 同步大灰狼仓库
+name: 同步上游仓库
 on:
   workflow_dispatch:
     inputs:
@@ -61,41 +52,41 @@ jobs:
         if [[ -d repogx/build/openwrt_amlogic ]];then
           rm -fr shangyou/build/openwrt_amlogic/.config
         fi
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/X86.yml" 2>/dev/null)" ]]; then
-          echo "CRON2=$(grep -A 1 'schedule:' repogx/.github/workflows/X86.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-          echo "CRON1=$(grep -A 1 'schedule:' shangyou/.github/workflows/X86.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-          if [[ `grep 'cron:' repogx/.github/workflows/X86.yml |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
-            sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/X86.yml
-            sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/X86.yml
+        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/LEDE-X86.yml" 2>/dev/null)" ]]; then
+          echo "CRON2=$(grep -A 1 'schedule:' repogx/.github/workflows/LEDE-X86.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          echo "CRON1=$(grep -A 1 'schedule:' shangyou/.github/workflows/LEDE-X86.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          if [[ `grep 'cron:' repogx/.github/workflows/LEDE-X86.yml |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
+            sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/LEDE-X86.yml
+            sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/LEDE-X86.yml
           fi
-          echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/X86.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-          echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/X86.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+          echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/LEDE-X86.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+          echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/LEDE-X86.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
           echo "QIDONG1=$(grep -A 1 'paths:' shangyou/.github/workflows/compile.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')" >> $GITHUB_ENV
           echo "QIDONG2=- 'config'" >> $GITHUB_ENV
           echo "TARGE1=$(grep 'target: \[' shangyou/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
           echo "TARGE2=$(grep 'target: \[' repogx/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-          echo "BEIYONG1=$(grep -A 2 'target:' shangyou/.github/workflows/X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
-          echo "BEIYONG2=$(grep -A 2 'target:' repogx/.github/workflows/X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
-          echo "QDMAME1=$(sed -n '1,50p' shangyou/.github/workflows/X86.yml |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-          echo "QDMAME2=$(sed -n '1,50p' repogx/.github/workflows/X86.yml |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          echo "BEIYONG1=$(grep -A 2 'target:' shangyou/.github/workflows/LEDE-X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
+          echo "BEIYONG2=$(grep -A 2 'target:' repogx/.github/workflows/LEDE-X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
+          echo "QDMAME1=$(sed -n '1,50p' shangyou/.github/workflows/LEDE-X86.yml |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          echo "QDMAME2=$(sed -n '1,50p' repogx/.github/workflows/LEDE-X86.yml |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
         fi
         
     - name: 同步上游仓库
       if: env.REPO_TOKEN && (github.event.inputs.again-fork == 'fork')
       run: |
         cd $GITHUB_WORKSPACE
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/X86.yml" 2>/dev/null)" ]]; then
+        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/LEDE-X86.yml" 2>/dev/null)" ]]; then
           if [[ -n "${{env.QDMAME1}}" ]] && [[ -n "${{env.QDMAME2}}" ]]; then
-            sed -i "s/${{env.QDMAME1}}/${{env.QDMAME2}}/g" shangyou/.github/workflows/X86.yml
+            sed -i "s/${{env.QDMAME1}}/${{env.QDMAME2}}/g" shangyou/.github/workflows/LEDE-X86.yml
           fi
           if [[ -n "${{env.BEIYONG1}}" ]] && [[ -n "${{env.BEIYONG2}}" ]]; then
-            sed -i "s/${{env.BEIYONG1}}/${{env.BEIYONG2}}/g" shangyou/.github/workflows/X86.yml
+            sed -i "s/${{env.BEIYONG1}}/${{env.BEIYONG2}}/g" shangyou/.github/workflows/LEDE-X86.yml
           fi
           if [[ -n "${{env.CRON1}}" ]] && [[ -n "${{env.CRON2}}" ]]; then
-            sed -i "s/${{env.CRON1}}/${{env.CRON2}}/g" shangyou/.github/workflows/X86.yml
+            sed -i "s/${{env.CRON1}}/${{env.CRON2}}/g" shangyou/.github/workflows/LEDE-X86.yml
           fi
           if [[ -n "${{env.TARGET1}}" ]] && [[ -n "${{env.TARGET2}}" ]]; then
-            sed -i "s/${{env.TARGET1}}/${{env.TARGET2}}/g" shangyou/.github/workflows/X86.yml
+            sed -i "s/${{env.TARGET1}}/${{env.TARGET2}}/g" shangyou/.github/workflows/LEDE-X86.yml
           fi
           if [[ -n "${{env.TARGE1}}" ]] && [[ -n "${{env.TARGE2}}" ]]; then
             sed -i "s/${{env.TARGE1}}/${{env.TARGE2}}/g" shangyou/.github/workflows/compile.yml
@@ -110,10 +101,10 @@ jobs:
           git rm -rf $GITHUB_WORKSPACE/repogx/.github/workflows/compile.yml
         fi
         cp -Rf $GITHUB_WORKSPACE/shangyou/.github/workflows/compile.yml .github/workflows/compile.yml
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/X86.yml" 2>/dev/null)" ]]; then
-          git rm -rf $GITHUB_WORKSPACE/repogx/.github/workflows/X86.yml
+        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/LEDE-X86.yml" 2>/dev/null)" ]]; then
+          git rm -rf $GITHUB_WORKSPACE/repogx/.github/workflows/LEDE-X86.yml
         fi
-        cp -Rf $GITHUB_WORKSPACE/shangyou/.github/workflows/X86.yml .github/workflows/X86.yml
+        cp -Rf $GITHUB_WORKSPACE/shangyou/.github/workflows/LEDE-X86.yml .github/workflows/LEDE-X86.yml
         git rm -rf $GITHUB_WORKSPACE/repogx/.github/workflows/${{env.BILDYML}}
         cp -Rf $GITHUB_WORKSPACE/shangyou/.github/workflows/synchronization.yml .github/workflows/synchronization.yml
         if [[ -f build/Lede_source/diy-part.sh ]];then
@@ -159,6 +150,6 @@ jobs:
         cp -Rf $GITHUB_WORKSPACE/shangyou/* ./
         cp -Rf $GITHUB_WORKSPACE/shangyou/.github/workflows/* .github/workflows
         git add .
-        git commit -m "同步上游shidahuilang/openwrt于$(date +%Y年%m月%d号%H时%M分%S秒)"
+        git commit -m "同步上游281677160/build-actions于$(date +%Y年%m月%d号%H时%M分%S秒)"
         git push --quiet "https://${{ secrets.REPO_TOKEN }}@github.com/${{github.repository}}" HEAD:main
         echo "同步完成，请注意查看[diy-part.sh]和[settings.ini]文件的变化和设置好!"

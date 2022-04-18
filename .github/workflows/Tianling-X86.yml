@@ -1,4 +1,4 @@
-name: 触发Mortal-X86启动编译
+name: 触发Tianling-X86启动编译
 on:
   workflow_dispatch:
     inputs:
@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [Mortal_source]
+        target: [Tianling_source]
 
         # [Lede_source,Lienol_source,Mortal_source,Tianling_source,openwrt_amlogic]
 

@@ -20,7 +20,6 @@ uci set network.lan.dns='223.5.5.5 114.114.114.114'           # DNS(多个DNS要
 #uci set dhcp.lan.ignore='1'                                  # 关闭DHCP功能（去掉uci前面的#生效）
 uci set system.@system[0].hostname='OpenWrt'                  # 修改主机名称为OpenWrt
 #uci set ttyd.@ttyd[0].command='/bin/login -f root'           # 设置ttyd免帐号登录（去掉uci前面的#生效）
-
 # 如果有用IPV6的话,可以使用以下命令创建IPV6客户端(LAN口)（去掉全部代码uci前面#号生效）
 uci set network.ipv6=interface
 uci set network.ipv6.proto='dhcpv6'

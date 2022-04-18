@@ -1,14 +1,3 @@
-#
-#
-# 此文件为编译文件,一般情况下不使用这个来启动,运行build-openwrt.yml会自动触发编译
-#
-# 如果自动触发挂了的情况下，可以在这里选择好机型，选择 compile 启动编译
-#
-# REPO_TOKEN密匙制作教程：https://git.io/jm.md
-#
-#
-
-
 name: compile
 on:
   workflow_dispatch:
@@ -16,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/Mortal_source/start-up/start'
+      - 'Config'
 
 env:
   Github: https://github.com/${{github.repository}}
@@ -40,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [Mortal_source]
+        target: [Lede_source]
         
         # [Lede_source,Lienol_source,Mortal_source,Tianling_source,openwrt_amlogic]
 
@@ -50,53 +39,28 @@ jobs:
 
     - name: 读取脚本
       run: |
-        source "${GITHUB_WORKSPACE}/build/${{matrix.target}}/settings.ini"
-        echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV
-        echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV
-        echo "CONFIG_FILE=${CONFIG_FILE}" >> $GITHUB_ENV
-        echo "DIY_PART_SH=${DIY_PART_SH}" >> $GITHUB_ENV
-        echo "UPLOAD_FIRMWARE=${UPLOAD_FIRMWARE}" >> $GITHUB_ENV
-        echo "UPLOAD_WETRANSFER=${UPLOAD_WETRANSFER}" >> $GITHUB_ENV
-        echo "UPLOAD_RELEASE=${UPLOAD_RELEASE}" >> $GITHUB_ENV
-        echo "SERVERCHAN_SCKEY=${SERVERCHAN_SCKEY}" >> $GITHUB_ENV
-        echo "REGULAR_UPDATE=${REGULAR_UPDATE}" >> $GITHUB_ENV
-        echo "USE_CACHEWRTBUILD=${USE_CACHEWRTBUILD}" >> $GITHUB_ENV
-        echo "AUTOMATIC_AMLOGIC=${AUTOMATIC_AMLOGIC}" >> $GITHUB_ENV
-        echo "BY_INFORMATION=${BY_INFORMATION}" >> $GITHUB_ENV
-        echo "Library=${Warehouse##*/}" >> $GITHUB_ENV
-        echo "matrixtarget=${{matrix.target}}" >> $GITHUB_ENV
+        export matrixtarget="${{ matrix.target }}"
+        git clone --depth 1 -b main https://github.com/shidahuilang/common ${GITHUB_WORKSPACE}/build/common
+        mv -f ${GITHUB_WORKSPACE}/build/common/*.sh ${GITHUB_WORKSPACE}/build/${{matrix.target}}/
+        chmod -R +x ${GITHUB_WORKSPACE}/build
+        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_repo_url
+        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_settings
     
-    - name: 部署编译
+    - name: 部署环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /usr/lib/jvm /opt/ghc
-        sudo -E apt-get -qq update -y
-        sudo -E apt-get -qq full-upgrade -y
-        sudo -E apt-get -qq install -y build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 lib32stdc++6 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl rename libpcap0.8-dev swig rsync
-        sudo -E apt-get -qq autoremove -y --purge
-        sudo -E apt-get -qq clean
-        sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /${{matrix.target}}
-        sudo chown $USER:$GROUPS /${{matrix.target}}
-        if [[ "${{matrix.target}}" == "openwrt_amlogic" ]]; then
-            docker rmi $(docker images -q)
-            sudo -E apt-get remove -y --purge azure-cli ghc zulu* hhvm llvm* firefox google* dotnet* powershell mysql* php* mssql-tools msodbcsql17 android*
-            sudo rm -rf /etc/mysql /etc/php /swapfile
-        fi
+        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_update
     
     - name: 下载"${{matrix.target}}"源码
       working-directory: /${{matrix.target}}
       run: |
-        git clone --depth 1 -b main https://github.com/shidahuilang/common ${GITHUB_WORKSPACE}/build/common
-        mv -f ${GITHUB_WORKSPACE}/build/common/*.sh ${GITHUB_WORKSPACE}/build/${{matrix.target}}/
-        chmod -R +x ${GITHUB_WORKSPACE}/build
         git clone -b "$REPO_BRANCH" --single-branch "$REPO_URL" openwrt
         ln -sf /${{matrix.target}}/openwrt $GITHUB_WORKSPACE/openwrt
     
-    - name: 公 告
+    - name: 公 告展示
       run: |
-        cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt
+        echo
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_variable
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_Notice
  
@@ -105,7 +69,7 @@ jobs:
         cd openwrt
         source $BUILD_PATH/common.sh && Diy_menu
     
-    - name: 缓存加速
+    - name: 缓存加速(7天内对应源码相同机型二次编译有效，每次只保留一个源码的缓存)
       if: env.USE_CACHEWRTBUILD == 'true'
       uses: klever1988/cachewrtbuild@test
       with:
@@ -141,7 +105,7 @@ jobs:
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
     
-    - name: 开始编译
+    - name: 编译固件
       id: compile
       run: |
         cd openwrt
@@ -222,7 +186,7 @@ jobs:
         overwrite: true
         file_glob: true
 
-    - name: 信息通知
+    - name: 电报通知
       continue-on-error: true
       if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TG'
       run: |

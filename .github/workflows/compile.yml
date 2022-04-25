@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/Lede_nanopi_r4s/start-up/start'
+      - 'build/Lede_nanopi_r2s/start-up/start'
 
 env:
   Github: https://github.com/${{github.repository}}
@@ -29,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [Lede_nanopi_r4s]
+        target: [Lede_nanopi_r2s]
         
         # [Lede_source,Lienol_source,Mortal_source,Tianling_source,openwrt_amlogic]
 

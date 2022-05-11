@@ -10,11 +10,11 @@
 
 
 cat >$NETIP <<-EOF
-uci set network.lan.ipaddr='192.168.2.1'                      # IPv4 地址(openwrt后台地址)
+uci set network.lan.ipaddr='192.168.4.1'                      # IPv4 地址(openwrt后台地址)
 uci set network.lan.netmask='255.255.255.0'                   # IPv4 子网掩码
-uci set network.lan.gateway='192.168.2.1'                     # IPv4 网关
-uci set network.lan.broadcast='192.168.2.255'                 # IPv4 广播
-uci set network.lan.dns='114.114.114.114 223.5.5.5'           # DNS(多个DNS要用空格分开)
+#uci set network.lan.gateway='192.168.2.1'                     # IPv4 网关
+#uci set network.lan.broadcast='192.168.2.255'                 # IPv4 广播
+#uci set network.lan.dns='114.114.114.114 223.5.5.5'           # DNS(多个DNS要用空格分开)
 uci set network.lan.delegate='0'                              # 去掉LAN口使用内置的 IPv6 管理(若用IPV6请注释或者删除这个)
 #uci set dhcp.@dnsmasq[0].filter_aaaa='1'                     # 禁止解析 IPv6 DNS记录(若用IPV6请注释或者删除这个)
 #uci set dhcp.lan.ignore='1'                                  # 关闭DHCP功能（去掉uci前面的#生效）
@@ -40,7 +40,7 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 
 
 # 增加个性名字 ${Author} 默认为你的github帐号,修改时候把 ${Author} 替换成你要的
-sed -i "s/OpenWrt /大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PATH
+sed -i "s/OpenWrt /$(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PATH
 
 
 # 设置首次登录后台密码为空（进入openwrt后自行修改密码）

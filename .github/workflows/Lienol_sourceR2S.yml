@@ -1,4 +1,4 @@
-name: 触发R2c启动编译
+name: 触发Lienol_sourceR2S启动编译
 on:
   workflow_dispatch:
     inputs:

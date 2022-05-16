@@ -1,0 +1,83 @@
+
+config smartdns
+	option server_name 'smartdns'
+	option port '6053'
+	option tcp_server '1'
+	option dualstack_ip_selection '0'
+	option redirect 'dnsmasq-upstream'
+	option cache_size '2048'
+	option rr_ttl_min '300'
+	option seconddns_tcp_server '1'
+	option coredump '0'
+	option seconddns_enabled '1'
+	option seconddns_port '5335'
+	option seconddns_server_group 'us'
+	option seconddns_no_speed_check '1'
+	option seconddns_no_dualstack_selection '1'
+	option seconddns_no_cache '1'
+	option force_aaaa_soa '1'
+	option ipv6_server '0'
+	option prefetch_domain '1'
+	option serve_expired '1'
+	option seconddns_no_rule_addr '1'
+	option seconddns_no_rule_nameserver '1'
+	option seconddns_no_rule_ipset '1'
+	option seconddns_no_rule_soa '1'
+	option enabled '1'
+	list old_redirect 'dnsmasq-upstream'
+	list old_port '6053'
+	list old_enabled '1'
+
+config server
+	option enabled '1'
+	option type 'udp'
+	option name '阿里DNS'
+	option ip '223.5.5.5'
+	option port '53'
+
+config server
+	option enabled '1'
+	option type 'udp'
+	option name '腾讯DNS'
+	option ip '119.29.29.29'
+	option port '53'
+
+config server
+	option enabled '1'
+	option type 'udp'
+	option name '114'
+	option ip '114.114.114.114'
+	option port '53'
+
+config server
+	option enabled '1'
+	option type 'udp'
+	option name '成都DNS'
+	option ip '202.98.96.68'
+	option port '53'
+
+config server
+	option enabled '1'
+	option type 'udp'
+	option name '成都DNS'
+	option ip '61.139.2.69'
+	option port '53'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '8.8.8.8'
+	option port '853'
+	option type 'tls'
+	option server_group 'us'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '8.8.4.4'
+	option port '853'
+	option type 'tls'
+	option server_group 'us'
+	option blacklist_ip '0'
+

@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+START=99
+start ( ) {
+echo 0 > /sys/class/pwm/pwmchip0/export
+echo 0 > /sys/class/pwm/pwmchip0/pwm0/enable
+echo 50000 > /sys/class/pwm/pwmchip0/pwm0/period
+echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable
+echo 49990 > /sys/class/pwm/pwmchip0/pwm0/duty_cycle; # 初始风扇不转
+while true
+do
+temp=$(cat /sys/class/thermal/thermal_zone0/temp ) #去掉了$旁的空格
+if [ $temp -gt 45000 ] ; then # 温度高于 45 风扇开始转，可修改，正常使用设置为55000
+echo 30000 > /sys/class/pwm/pwmchip0/pwm0/duty_cycle;
+elif [ $temp -le 40000 ] ; then # 温度低于 40 风扇停转，可修改
+echo 49990 > /sys/class/pwm/pwmchip0/pwm0/duty_cycle;
+fi #多加了fi
+sleep 1s; # 60s检测一次，正常使用设置为60s
+done
+}

@@ -3,7 +3,7 @@
 - 默认IP地址：192.168.2.1
 - 账户：root   密码：空
  
-## [`固件下载地址`](https://github.com/shidahuilang/openwrt/releases)
+  ## [`固件下载地址`](https://github.com/shidahuilang/openwrt/releases)
 
 - ================================================================
 - 首先需要打开 Openwrt 主页,点击系统-TTYD 终端或命令窗,或者使用putty 

@@ -1,0 +1,2 @@
+config engine 'devcrypto'
+	option enabled '1'

@@ -1,4 +1,4 @@
-name: 触发arm机型启动编译
+name: 触发K2P启动编译
 on:
   workflow_dispatch:
     inputs:

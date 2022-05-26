@@ -40,7 +40,7 @@ sed -i 's/luci-theme-bootstrap/luci-theme-neobird2/g' feeds/luci/collections/luc
 
 
 # 增加个性名字 ${Author} 默认为你的github帐号,修改时候把 ${Author} 替换成你要的
-sed -i "s/OpenWrt /(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PATH
+sed -i "s/OpenWrt (TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PATH
 
 
 # 设置首次登录后台密码为空（进入openwrt后自行修改密码）

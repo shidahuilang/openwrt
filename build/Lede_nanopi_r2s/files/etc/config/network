@@ -1,0 +1,50 @@
+
+config interface 'loopback'
+	option ifname 'lo'
+	option proto 'static'
+	option ipaddr '127.0.0.1'
+	option netmask '255.0.0.0'
+
+config globals 'globals'
+	option ula_prefix 'fd3d:4e18:4586::/48'
+
+config interface 'lan'
+	option type 'bridge'
+	option proto 'static'
+	option netmask '255.255.255.0'
+	option ip6assign '60'
+	option ipaddr '192.168.4.1'
+	option delegate '0'
+	option _orig_ifname 'eth1'
+	option _orig_bridge 'true'
+	option ifname 'eth0'
+
+config device 'lan_eth1_dev'
+	option name 'eth1'
+	option macaddr 'f2:8c:9c:ac:9c:6f'
+
+config interface 'wan'
+	option _orig_ifname 'eth0'
+	option _orig_bridge 'false'
+	option ifname 'eth1'
+	option proto 'pppoe'
+	option ipv6 'auto'
+	option keepalive '0'
+
+config device 'wan_eth0_dev'
+	option name 'eth0'
+	option macaddr 'f2:8c:9c:ac:9c:6e'
+
+config interface 'docker'
+	option ifname 'docker0'
+	option proto 'none'
+	option auto '0'
+
+config device
+	option type 'bridge'
+	option name 'docker0'
+
+config interface 'MODEM'
+	option proto 'dhcp'
+	option ifname 'eth1'
+

@@ -113,12 +113,13 @@ jobs:
         make -j$(($(nproc) + 1)) || make -j1 V=s
         echo "date=$(date "+%Y%m%d%H%M%S")" >> $GITHUB_ENV
         
-    - name: 打包晶晨固件
+    - name: 打包晶晨
       continue-on-error: true
       if: steps.compile.outcome == 'success' && env.AUTOMATIC_AMLOGIC == 'true'
       run: |
         cd $GITHUB_WORKSPACE
         source $BUILD_PATH/common.sh && Package_amlogic
+        
     - name: 整理固件
       continue-on-error: true
       id: organizer

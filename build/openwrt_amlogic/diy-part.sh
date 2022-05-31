@@ -77,5 +77,9 @@ sed -i 's/"带宽监控"/"监控"/g' `grep "带宽监控" -rl ./`
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间
 cat >${GITHUB_WORKSPACE}/Clear <<-EOF
-
+packages
+config.buildinfo
+feeds.buildinfo
+sha256sums
+version.buildinfo
 EOF

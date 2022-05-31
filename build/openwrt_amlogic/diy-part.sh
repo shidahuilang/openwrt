@@ -51,13 +51,15 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 
 
 # 取消路由器每天跑分任务
-sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"
+# sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"
 
 
 # 设置打包固件的机型，内核组合（可用内核是时时变化的,过老的内核就删除的，所以要选择什么内核请看说明）
-cat >$GITHUB_WORKSPACE/amlogic_openwrt <<-EOF
+# 当前可用机型 s922x s922x-n2 s922x-reva a311d s905x3 s905x2 s905x2-km3 s905l3a s912 s912-m8s s905d s905d-ki s905x s905w s905
+
+cat >"$AMLOGIC_SH_PATH" <<-EOF
 amlogic_model=s905d
-amlogic_kernel=5.10.100_5.4.180 -a true
+amlogic_kernel=5.15.25_5.10.100 -a true
 rootfs_size=960
 EOF
 

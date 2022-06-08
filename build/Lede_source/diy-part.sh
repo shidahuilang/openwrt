@@ -34,7 +34,7 @@ EOF
 
 
 
-sed -i 's/luci-lib-ipkg/luci-base/g' package/feeds/helloworld/luci-app-ssr-plus/Makefile
+sed -i 's/luci-lib-ipkg/luci-base/g' feeds/helloworld/luci-app-ssr-plus/Makefile
 
 # 设置 argon 为编译必选主题(可自行修改您要的,主题名称必须对,源码内必须有该主题)
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile

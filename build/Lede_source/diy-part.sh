@@ -33,9 +33,7 @@ EOF
 
 
 
-cd ./package/feeds/helloworld/luci-app-ssr-plus
-rm Makefile
-wget https://raw.githubusercontent.com/fw876/helloworld/b4ede27bc2665208b7c5b2901abab55ea780d7b3/luci-app-ssr-plus/Makefile
+
 
 # 设置 argon 为编译必选主题(可自行修改您要的,主题名称必须对,源码内必须有该主题)
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile

@@ -58,7 +58,7 @@ jobs:
         git clone -b "$REPO_BRANCH" --single-branch "$REPO_URL" openwrt
         ln -sf /${{matrix.target}}/openwrt $GITHUB_WORKSPACE/openwrt
     
-    - name: 公 告展示
+    - name: 公告展示
       run: |
         echo
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_variable

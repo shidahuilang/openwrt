@@ -7,7 +7,7 @@
  ## [`固件下载地址`](https://github.com/shidahuilang/openwrt/releases)
 
 - ================================================================
-- 首先需要打开 Openwrt 主页,点击系统-TTYD 终端或命令窗,或者使用putty 
+- 首先需要打开 Openwrt 主页,点击系统-TTYD 命令窗,或者使用putty和openwrt后台luci插件定时更新 
 - 输入`openwrt`即可进入固件升级菜单                            
 - 输入`openwrt`即可打开工具箱                                    
 - ================================================================
@@ -28,6 +28,8 @@ cd openwrt && make menuconfig
 ## 自动更新固件
 ![img.png](img/img.png)
 ![img1.png](img/img1.png)
+![img2.png](img/img2.png)
+![img3.png](img/img3.png)
 
 
 

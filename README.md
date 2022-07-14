@@ -5,7 +5,7 @@
 - 账户：root   密码：空
  
  ## [`固件下载地址`](https://github.com/shidahuilang/openwrt/releases/tag/AutoUpdate)
- ## [`插件下载地址`](https://github.com/shidahuilang/openwrt/releases/download/20220714051541/ipk.tar.gz)
+ ## [`插件下载地址`](https://github.com/shidahuilang/openwrt/releases/download/20220713220731/ipk.tar.gz)
 - ================================================================
 - 首先需要打开 Openwrt 主页,点击系统-TTYD 命令窗,或者使用putty和openwrt后台luci插件定时更新 
 - 输入`openwrt`即可进入固件升级菜单                            

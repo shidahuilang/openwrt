@@ -1,4 +1,4 @@
-name: 触发R4s启动编译
+name: 触发R5s启动编译
 on:
   workflow_dispatch:
     inputs:

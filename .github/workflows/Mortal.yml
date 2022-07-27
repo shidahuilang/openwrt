@@ -1,4 +1,4 @@
-name: 触发compile启动编译
+name: 触发35启动编译
 on:
   workflow_dispatch:
     inputs:

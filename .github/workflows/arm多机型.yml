@@ -1,4 +1,4 @@
-name: 触发arm机型启动编译
+name: 触发arm启动编译
 on:
   workflow_dispatch:
     inputs:
@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [nanopi_r4s,nanopi_r2s]
+        target: [nanopi_r2s,nanopi_r4s]
 
         # [Lede_source,Lienol_source,Mortal_source,Tianling_source,openwrt_amlogic]
 
@@ -107,7 +107,7 @@ jobs:
         
     - name: SSH远程连接（制作.config配置文件）
       if: env.SSH_ACTIONS == 'true' || (github.event.inputs.ssh == 'ssh')
-      uses: shidahuilang/debugger-action@master
+      uses: makebl/debugger-action@master
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

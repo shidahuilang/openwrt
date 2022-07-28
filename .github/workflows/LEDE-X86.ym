@@ -2,7 +2,7 @@
 #
 #
 
-name: x86
+name: LEDE-X86
 on:
   workflow_dispatch:
     inputs:

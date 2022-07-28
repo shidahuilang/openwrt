@@ -1,4 +1,4 @@
-name: 触发R2S启动编译
+name: R2S
 on:
   workflow_dispatch:
     inputs:

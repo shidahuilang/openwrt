@@ -1,4 +1,4 @@
-name: 触发LEDE-X86启动编译
+name: LEDE-X86
 on:
   workflow_dispatch:
     inputs:

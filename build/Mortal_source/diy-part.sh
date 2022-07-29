@@ -49,6 +49,8 @@ sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH
 # 取消路由器每天跑分任务
 sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$FIN_PATH"
 
+# 去除自带qbittorrent
+sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1
 
 # 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
 echo "OpenClash_branch" > dev

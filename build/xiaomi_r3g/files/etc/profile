@@ -4,7 +4,7 @@
 [ -f /etc/banner ] && cat /etc/banner
 [ -n "$FAILSAFE" ] && cat /etc/banner.failsafe
 [ -n "$FAILSAFE" -a -x /bin/bash ]  || {
-	for FILE in /etc/update-motd.d/*.sh; do
+	for FILE in /etc/shell-motd.d/*.sh; do
 		[ -f "$FILE" ] && env -i bash "$FILE"
 	done
 	unset FILE
@@ -65,4 +65,3 @@ service() {
 	/etc/init.d/$@
 }
 fi
-

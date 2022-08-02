@@ -1,3 +1,8 @@
+# REPO_TOKEN密匙制作教程：https://git.io/jm.md
+#
+#
+
+
 name: compile
 on:
   workflow_dispatch:
@@ -5,7 +10,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/Lede_source/start-up/start'
+      - '-config-'
 
 env:
   Github: https://github.com/${{github.repository}}
@@ -46,7 +51,7 @@ jobs:
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_repo_url
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_settings
     
-    - name: 部署环境
+    - name: 部署编译
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -58,7 +63,7 @@ jobs:
         git clone -b "$REPO_BRANCH" --single-branch "$REPO_URL" openwrt
         ln -sf /${{matrix.target}}/openwrt $GITHUB_WORKSPACE/openwrt
     
-    - name: 公告展示
+    - name: 公 告
       run: |
         echo
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_variable
@@ -69,7 +74,7 @@ jobs:
         cd openwrt
         source $BUILD_PATH/common.sh && Diy_menu
     
-    - name: 缓存加速
+    - name: 超级加速
       if: env.USE_CACHEWRTBUILD == 'true'
       uses: klever1988/cachewrtbuild@test
       with:
@@ -119,7 +124,6 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE
         source $BUILD_PATH/common.sh && Package_amlogic
-        
     - name: 整理固件
       continue-on-error: true
       id: organizer
@@ -187,7 +191,7 @@ jobs:
         overwrite: true
         file_glob: true
 
-    - name: 电报通知
+    - name: 信息通知
       continue-on-error: true
       if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TG'
       run: |

@@ -10,7 +10,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/openwrt_amlogic/start-up/start'
+      - 'build/nanopi_r4s/start-up/start'
 
 env:
   Github: https://github.com/${{github.repository}}
@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [openwrt_amlogic]
+        target: [nanopi_r4s]
         
         # [Lede_source,Lienol_source,Mortal_source,Tianling_source,openwrt_amlogic]
 

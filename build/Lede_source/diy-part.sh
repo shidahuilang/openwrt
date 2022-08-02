@@ -22,7 +22,6 @@ uci set dhcp.lan.ignore='1'                                  # 旁路由关闭DH
 uci set system.@system[0].hostname='OpenWrt'                 # 修改主机名称为OpenWrt
 #uci set ttyd.@ttyd[0].command='/bin/login -f root'          # 设置ttyd免帐号登录（去掉uci前面的#生效）
 
-
 # 如果有用IPV6的话,可以使用以下命令创建IPV6客户端(LAN口)（去掉全部代码uci前面#号生效）
 uci set network.ipv6=interface
 uci set network.ipv6.proto='dhcpv6'
@@ -68,7 +67,7 @@ echo "OpenClash_branch" > master
 sed -i 's/PATCHVER:=5.15/PATCHVER:=5.18/g' target/linux/x86/Makefile
 
  # 停止监听443端口
-# sed -i 's@list listen_https@# list listen_https@g' package/network/services/uhttpd/files/uhttpd.config
+sed -i 's@list listen_https@# list listen_https@g' package/network/services/uhttpd/files/uhttpd.config
 
 # K3专用，编译K3的时候只会出K3固件（其他机型也适宜,把phicomm_k3替换一下，名字要绝对正确才行）
 #sed -i 's|^TARGET_|# TARGET_|g; s|# TARGET_DEVICES += phicomm_k3|TARGET_DEVICES += phicomm_k3|' target/linux/bcm53xx/image/Makefile

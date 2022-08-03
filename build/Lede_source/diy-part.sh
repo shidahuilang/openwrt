@@ -69,7 +69,7 @@ echo "OpenClash_branch" > master
 sed -i 's/PATCHVER:=5.15/PATCHVER:=5.18/g' target/linux/x86/Makefile
 
  # 停止监听443端口
-sed -i 's@list listen_https@# list listen_https@g' package/network/services/uhttpd/files/uhttpd.config
+# sed -i 's@list listen_https@# list listen_https@g' package/network/services/uhttpd/files/uhttpd.config
 
 # K3专用，编译K3的时候只会出K3固件（其他机型也适宜,把phicomm_k3替换一下，名字要绝对正确才行）
 #sed -i 's|^TARGET_|# TARGET_|g; s|# TARGET_DEVICES += phicomm_k3|TARGET_DEVICES += phicomm_k3|' target/linux/bcm53xx/image/Makefile

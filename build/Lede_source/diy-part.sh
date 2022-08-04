@@ -15,7 +15,7 @@ uci set network.lan.netmask='255.255.255.0'                                 # IP
 uci set network.lan.gateway='192.168.2.1'                                   # IPv4 网关
 uci set network.lan.broadcast='192.168.2.255'                               # IPv4 广播
 uci set network.lan.dns='223.5.5.5 114.114.114.114'                         # DNS(多个DNS要用空格分开)
-uci set network.lan.delegate='0'                                            # 去掉LAN口使用内置的 IPv6 管理
+# uci set network.lan.delegate='0'                                            # 去掉LAN口使用内置的 IPv6 管理
 uci set network.ipv6=interface                                              #创建ipv6接口
 uci set network.ipv6.proto='dhcpv6'                                         #开启dhcpipv6                                      
 uci set network.ipv6.ifname='@lan'                                          #开启dhcpipv6                                    
@@ -34,13 +34,14 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 
 
 # 编译多主题时,设置某主题成默认主题（危险操作,你要确定您这里改的主题的名字准确,比如[argon]和肯定编译了该主题,要不然进不了后台）
-#sed -i "/exit 0/i\uci set luci.main.mediaurlbase='/luci-static/neobird2' && uci commit luci" "$BASE_PATH/etc/rc.local"
+# sed -i "/exit 0/i\uci set luci.main.mediaurlbase='/luci-static/neobird2' && uci commit luci" "$BASE_PATH/etc/rc.local"
 
 
 # 增加个性名字 ${Author} 默认为你的github帐号,修改时候把 ${Author} 替换成你要的
 sed -i "s/OpenWrt /大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PATH
 
-
+# 拉取旧版OpenClash固件
+# svn co https://github.com/shidahuilang/OpenClash package/luci-app-xiaolaoshu
 
 # 设置首次登录后台密码为空（进入openwrt后自行修改密码）
 sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH

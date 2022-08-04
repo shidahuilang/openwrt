@@ -22,8 +22,8 @@ uci set network.ipv6.ifname='@lan'                                          #开
 uci set network.ipv6.reqaddress='try'                                       #开启dhcpipv6                                  
 uci set network.ipv6.reqprefix='auto'                                       #开启dhcpipv6  
 uci commit network                                                          # 不要删除跟注释,除非上面全部删除或注释掉了
-uci set dhcp.lan.ignore='1'                                                 # 关闭DHCP功能（去掉uci前面的#生效）
-uci commit dhcp                                                             # 跟‘关闭DHCP功能’联动,同时启用或者删除跟注释（去掉uci前面的#生效）
+# uci set dhcp.lan.ignore='1'                                                 # 关闭DHCP功能（去掉uci前面的#生效）
+# uci commit dhcp                                                             # 跟‘关闭DHCP功能’联动,同时启用或者删除跟注释（去掉uci前面的#生效）
 uci set system.@system[0].hostname='OpenWrt'                                # 修改主机名称为OpenWrt
 #sed -i 's/\/bin\/login/\/bin\/login -f root/' /etc/config/ttyd             # 设置ttyd免帐号登录，如若开启，进入OPENWRT后可能要重启一次才生效（去掉uci前面的#生效）
 EOF

@@ -71,16 +71,10 @@ jobs:
     
     - name: 超级加速
       if: env.USE_CACHEWRTBUILD == 'true'
-      uses: klever1988/cachewrtbuild@test
+      uses: makebl/cachewrtbuild@test
       with:
-       ccache: 'true'
-       #是否跳过工具链编译
-       skip: false
-       #清空缓存
-       clean: false
-       #是否缓存工具链目录
-       toolchain: true
-       prefix: ${{ github.workspace }}/openwrt
+        ccache: 'true'
+        prefix: ${{ github.workspace }}/openwrt
 
     - name: 生成配置
       run: |

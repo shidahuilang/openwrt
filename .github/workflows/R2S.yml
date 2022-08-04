@@ -1,4 +1,4 @@
-name: 触发N1启动编译
+name: R2s
 on:
   workflow_dispatch:
     inputs:
@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [openwrt_amlogic]
+        target: [nanopi_r2s]
 
         # [Lede_source,Lienol_source,Mortal_source,Tianling_source,openwrt_amlogic]
 
@@ -107,7 +107,7 @@ jobs:
         
     - name: SSH远程连接（制作.config配置文件）
       if: env.SSH_ACTIONS == 'true' || (github.event.inputs.ssh == 'ssh')
-      uses: shidahuilang/debugger-action@master
+      uses: makebl/debugger-action@master
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -148,7 +148,7 @@ jobs:
         echo "${{ env.SOURCE }}$(date +%Y年%m月%d号%H时%M分%S秒)" > ${{matrix.target}}/build/${{matrix.target}}/start-up/start
         cd ${{matrix.target}}
         git add .
-        git commit -m "启动编译${{env.TARGET_PROFILE}}固件"
+        git commit -m "启动${{matrix.target}}"
         git push --force "https://${{ secrets.REPO_TOKEN }}@github.com/${{github.repository}}" HEAD:main
         
     - name: 电报机器人或pushplus信息通知
@@ -179,14 +179,7 @@ jobs:
         source $BUILD_PATH/upgrade.sh && GET_TARGET_INFO
         source $BUILD_PATH/common.sh && Diy_xinxi
     
-    - name: 清理Actions空间
-      if: env.REPO_TOKEN
-      uses: Mattraks/delete-workflow-runs@main
-      with:
-          token: ${{ secrets.REPO_TOKEN }}
-          repository: ${{ github.repository }}
-          keep_minimum_runs: 0
-          retain_days: ${{ env.retain_days }}
+
     
     - name: 删除releases
       if: env.REPO_TOKEN

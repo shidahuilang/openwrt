@@ -58,7 +58,7 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 echo "OpenClash_branch" > master
 
 # x86机型,默认内核5.15，修改内核为5.18（源码时时变,自行根据target/linux/x86/Makefile文件修改）
-sed -i 's/PATCHVER=5.18/PATCHVER=5.15/g' target/linux/rockchip/Makefile
+sed -i 's/PATCHVER:=5.15/PATCHVER:=5.18/g' target/linux/x86/Makefile
 
 
 # 在线更新时，删除不想保留固件的某个文件，在EOF跟EOF之间加入删除代码，记住这里对应的是固件的文件路径，比如： rm /etc/config/luci

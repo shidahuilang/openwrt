@@ -37,11 +37,13 @@ sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH                                     
 
 # sed -i '/to-ports 53/d' $ZZZ_PATH                                                                   # 删除默认防火墙
 
-#sed -i 's/PATCHVER:=5.15/PATCHVER:=5.10/g' target/linux/x86/Makefile                               # x86机型,默认内核5.15，修改内核为5.10（去掉sed前面的#生效）
+sed -i 's/PATCHVER:=5.18/PATCHVER:=5.15/g' target/linux/x86/Makefile                              # x86机型,默认内核5.18，修改内核为5.15（去掉sed前面的#生效）
 
 # K3专用，编译K3的时候只会出K3固件（去掉sed前面的#生效）
 #sed -i 's|^TARGET_|# TARGET_|g; s|# TARGET_DEVICES += phicomm_k3|TARGET_DEVICES += phicomm_k3|' target/linux/bcm53xx/image/Makefile
 
+# 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
+echo "OpenClash_branch" > master
 
 # 在线更新时，删除不想保留固件的某个文件，在EOF跟EOF之间加入删除代码，记住这里对应的是固件的文件路径，比如： rm /etc/config/luci
 cat >$DELETE <<-EOF

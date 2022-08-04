@@ -71,7 +71,7 @@ jobs:
     
     - name: 超级加速
       if: env.USE_CACHEWRTBUILD == 'true'
-      uses: makebl/cachewrtbuild@test
+      uses: klever1988/cachewrtbuild@test
       with:
         ccache: 'true'
         prefix: ${{ github.workspace }}/openwrt

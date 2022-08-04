@@ -10,24 +10,22 @@
 
 
 cat >$NETIP <<-EOF
-uci set network.lan.ipaddr='192.168.2.1'                      # IPv4 地址(openwrt后台地址)
-uci set network.lan.netmask='255.255.255.0'                   # IPv4 子网掩码
-uci set network.lan.gateway='192.168.2.1'                     # IPv4 网关
-uci set network.lan.broadcast='192.168.2.255'                 # IPv4 广播
-uci set network.lan.dns='114.114.114.114 223.5.5.5'           # DNS(多个DNS要用空格分开)
-uci set network.lan.delegate='0'                              # 去掉LAN口使用内置的 IPv6 管理(若用IPV6请注释或者删除这个)
-#uci set dhcp.@dnsmasq[0].filter_aaaa='1'                     # 禁止解析 IPv6 DNS记录(若用IPV6请注释或者删除这个)
-#uci set dhcp.lan.ignore='1'                                  # 关闭DHCP功能（去掉uci前面的#生效）
-uci set system.@system[0].hostname='OpenWrt'                  # 修改主机名称为OpenWrt
-#uci set ttyd.@ttyd[0].command='/bin/login -f root'           # 设置ttyd免帐号登录（去掉uci前面的#生效）
-
-# 如果有用IPV6的话,可以使用以下命令创建IPV6客户端(LAN口)（去掉全部代码uci前面#号生效）
-uci set network.ipv6=interface
-uci set network.ipv6.proto='dhcpv6'
-uci set network.ipv6.ifname='@lan'
-uci set network.ipv6.reqaddress='try'
-uci set network.ipv6.reqprefix='auto'
-uci set firewall.@zone[0].network='lan ipv6'
+uci set network.lan.ipaddr='192.168.2.1'                                    # IPv4 地址(openwrt后台地址)
+uci set network.lan.netmask='255.255.255.0'                                 # IPv4 子网掩码
+uci set network.lan.gateway='192.168.2.1'                                   # IPv4 网关
+uci set network.lan.broadcast='192.168.2.255'                               # IPv4 广播
+uci set network.lan.dns='223.5.5.5 114.114.114.114'                         # DNS(多个DNS要用空格分开)
+# uci set network.lan.delegate='0'                                          # 去掉LAN口使用内置的 IPv6 管理
+uci set network.ipv6=interface                                              #创建ipv6接口
+uci set network.ipv6.proto='dhcpv6'                                         #开启dhcpipv6                                      
+uci set network.ipv6.ifname='@lan'                                          #开启dhcpipv6                                    
+uci set network.ipv6.reqaddress='try'                                       #开启dhcpipv6                                  
+uci set network.ipv6.reqprefix='auto'                                       #开启dhcpipv6  
+uci commit network                                                          # 不要删除跟注释,除非上面全部删除或注释掉了
+uci set dhcp.lan.ignore='1'                                                 # 关闭DHCP功能（去掉uci前面的#生效）
+uci commit dhcp                                                             # 跟‘关闭DHCP功能’联动,同时启用或者删除跟注释（去掉uci前面的#生效）
+uci set system.@system[0].hostname='OpenWrt'                                # 修改主机名称为OpenWrt
+#sed -i 's/\/bin\/login/\/bin\/login -f root/' /etc/config/ttyd             # 设置ttyd免帐号登录，如若开启，进入OPENWRT后可能要重启一次才生效（去掉uci前面的#生效）
 EOF
 
 
@@ -36,15 +34,14 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 
 
 # 编译多主题时,设置某主题成默认主题（危险操作,你要确定您这里改的主题的名字准确,比如[argon]和肯定编译了该主题,要不然进不了后台）
-#sed -i "/exit 0/i\uci set luci.main.mediaurlbase='/luci-static/neobird2' && uci commit luci" "$BASE_PATH/etc/rc.local"
+# sed -i "/exit 0/i\uci set luci.main.mediaurlbase='/luci-static/neobird2' && uci commit luci" "$BASE_PATH/etc/rc.local"
 
 
 # 增加个性名字 ${Author} 默认为你的github帐号,修改时候把 ${Author} 替换成你要的
 sed -i "s/OpenWrt /大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PATH
 
-# 交换 LAN/WAN 口
-#sed -i 's,"eth1" "eth0","eth0" "eth1",g' target/linux/rockchip/armv8/base-files/etc/board.d/02_network
-#sed -i "s,'eth1' 'eth0','eth0' 'eth1',g" target/linux/rockchip/armv8/base-files/etc/board.d/02_network
+# 拉取旧版OpenClash固件
+# svn co https://github.com/shidahuilang/OpenClash package/luci-app-xiaolaoshu
 
 # 设置首次登录后台密码为空（进入openwrt后自行修改密码）
 sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH
@@ -55,10 +52,15 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 
 
 # 取消路由器每天跑分任务
-sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"
+# sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"
 
 # 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
 echo "OpenClash_branch" > master
+
+# 交换 LAN/WAN 口
+#sed -i 's,"eth1" "eth0","eth0" "eth1",g' target/linux/rockchip/armv8/base-files/etc/board.d/02_network
+#sed -i "s,'eth1' 'eth0','eth0' 'eth1',g" target/linux/rockchip/armv8/base-files/etc/board.d/02_network
+
 
 # x86机型,默认内核5.15，修改内核为5.18（源码时时变,自行根据target/linux/x86/Makefile文件修改）
 sed -i 's/PATCHVER=5.18/PATCHVER=5.15/g' target/linux/rockchip/Makefile
@@ -87,7 +89,7 @@ sed -i 's/"带宽监控"/"监控"/g' `grep "带宽监控" -rl ./`
 
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间（根据编译机型变化,自行调整需要删除的固件名称）
-cat >"$CLEAR_PATH" <<-EOF
+cat >${GITHUB_WORKSPACE}/Clear <<-EOF
 rm -rf config.buildinfo
 rm -rf feeds.buildinfo
 rm -rf sha256sums

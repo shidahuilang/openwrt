@@ -78,7 +78,7 @@ sed -i 's/"带宽监控"/"监控"/g' `grep "带宽监控" -rl ./`
 
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间
-cat >"$CLEAR_PATH" <<-EOF
+cat >${GITHUB_WORKSPACE}/Clear <<-EOF
 Lede-armvirt-64-rootfs-ext4.img.gz
 armvirt-64-Image
 armvirt-64-default.manifest

@@ -10,22 +10,25 @@
 
 
 cat >$NETIP <<-EOF
-uci set network.lan.ipaddr='192.168.2.1'                                    # IPv4 地址(openwrt后台地址)
-uci set network.lan.netmask='255.255.255.0'                                 # IPv4 子网掩码
-uci set network.lan.gateway='192.168.2.1'                                   # IPv4 网关
-uci set network.lan.broadcast='192.168.2.255'                               # IPv4 广播
-uci set network.lan.dns='223.5.5.5 114.114.114.114'                         # DNS(多个DNS要用空格分开)
-# uci set network.lan.delegate='0'                                          # 去掉LAN口使用内置的 IPv6 管理
-uci set network.ipv6=interface                                              #创建ipv6接口
-uci set network.ipv6.proto='dhcpv6'                                         #开启dhcpipv6                                      
-uci set network.ipv6.ifname='@lan'                                          #开启dhcpipv6                                    
-uci set network.ipv6.reqaddress='try'                                       #开启dhcpipv6                                  
-uci set network.ipv6.reqprefix='auto'                                       #开启dhcpipv6  
-uci commit network                                                          # 不要删除跟注释,除非上面全部删除或注释掉了
-# uci set dhcp.lan.ignore='1'                                                 # 关闭DHCP功能（去掉uci前面的#生效）
-# uci commit dhcp                                                             # 跟‘关闭DHCP功能’联动,同时启用或者删除跟注释（去掉uci前面的#生效）
-uci set system.@system[0].hostname='OpenWrt'                                # 修改主机名称为OpenWrt
-#sed -i 's/\/bin\/login/\/bin\/login -f root/' /etc/config/ttyd             # 设置ttyd免帐号登录，如若开启，进入OPENWRT后可能要重启一次才生效（去掉uci前面的#生效）
+uci set network.lan.ipaddr='192.168.2.1'                     # IPv4 地址(openwrt后台地址)
+uci set network.lan.netmask='255.255.255.0'                  # IPv4 子网掩码
+uci set network.lan.gateway='192.168.2.1'                   # 旁路由设置 IPv4 网关（去掉uci前面的#生效）
+uci set network.lan.broadcast='192.168.2.255'                # 旁路由设置 IPv4 广播（去掉uci前面的#生效）
+uci set network.lan.dns='223.5.5.5 114.114.114.114'          # 旁路由设置 DNS(多个DNS要用空格分开)（去掉uci前面的#生效）
+uci set network.lan.delegate='1'                             # 去掉LAN口使用内置的 IPv6 管理(若用IPV6请把'0'改'1')
+uci set dhcp.@dnsmasq[0].filter_aaaa='0'                     # 禁止解析 IPv6 DNS记录(若用IPV6请把'1'改'0')
+#uci set dhcp.lan.ignore='1'                                  # 旁路由关闭DHCP功能（去掉uci前面的#生效）
+#uci delete network.lan.type                                 # 旁路由去掉桥接模式（去掉uci前面的#生效）
+uci set system.@system[0].hostname='OpenWrt'                 # 修改主机名称为OpenWrt
+#uci set ttyd.@ttyd[0].command='/bin/login -f root'          # 设置ttyd免帐号登录（去掉uci前面的#生效）
+
+# 如果有用IPV6的话,可以使用以下命令创建IPV6客户端(LAN口)（去掉全部代码uci前面#号生效）
+uci set network.ipv6=interface
+uci set network.ipv6.proto='dhcpv6'
+uci set network.ipv6.ifname='@lan'
+uci set network.ipv6.reqaddress='try'
+uci set network.ipv6.reqprefix='auto'
+uci set firewall.@zone[0].network='lan ipv6'
 EOF
 
 
@@ -54,8 +57,7 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 # 取消路由器每天跑分任务
 # sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"
 
-# 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
-echo "OpenClash_branch" > master
+
 
 # 交换 LAN/WAN 口
 #sed -i 's,"eth1" "eth0","eth0" "eth1",g' target/linux/rockchip/armv8/base-files/etc/board.d/02_network

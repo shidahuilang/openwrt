@@ -57,8 +57,6 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 # 取消路由器每天跑分任务
 # sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"
 
-# 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
-echo "OpenClash_branch" > master
 
 # 交换 LAN/WAN 口
 #sed -i 's,"eth1" "eth0","eth0" "eth1",g' target/linux/rockchip/armv8/base-files/etc/board.d/02_network

@@ -21,6 +21,7 @@ uci set dhcp.lan.ignore='1'                                  # 旁路由关闭DH
 #uci delete network.lan.type                                 # 旁路由去掉桥接模式（去掉uci前面的#生效）
 uci set system.@system[0].hostname='OpenWrt'                 # 修改主机名称为OpenWrt
 #uci set ttyd.@ttyd[0].command='/bin/login -f root'          # 设置ttyd免帐号登录（去掉uci前面的#生效）
+
 # 如果有用IPV6的话,可以使用以下命令创建IPV6客户端(LAN口)（去掉全部代码uci前面#号生效）
 uci set network.ipv6=interface
 uci set network.ipv6.proto='dhcpv6'
@@ -59,7 +60,7 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 
 
 # x86机型,默认内核5.15，修改内核为5.10（源码时时变,自行根据target/linux/x86/Makefile文件修改）
-sed -i 's/PATCHVER:=5.18/PATCHVER:=5.15/g' target/linux/x86/Makefile
+sed -i 's/PATCHVER:=5.18/PATCHVER:=5.19/g' target/linux/x86/Makefile
 
  # 停止监听443端口
 # sed -i 's@list listen_https@# list listen_https@g' package/network/services/uhttpd/files/uhttpd.config

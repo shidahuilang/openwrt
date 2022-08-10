@@ -60,7 +60,7 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 
 
 # x86机型,默认内核5.15，修改内核为5.10（源码时时变,自行根据target/linux/x86/Makefile文件修改）
-sed -i 's/PATCHVER:=5.15/PATCHVER:=5.19/g' target/linux/x86/Makefile
+# sed -i 's/PATCHVER:=5.18/PATCHVER:=5.15/g' target/linux/x86/Makefile
 
  # 停止监听443端口
 # sed -i 's@list listen_https@# list listen_https@g' package/network/services/uhttpd/files/uhttpd.config

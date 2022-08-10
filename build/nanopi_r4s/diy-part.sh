@@ -96,5 +96,5 @@ rm -rf config.buildinfo
 rm -rf feeds.buildinfo
 rm -rf sha256sums
 rm -rf version.buildinfo
-rm -rf friendlyarm_nanopi-r4s.manifest
+rm -rf armv8-friendlyarm_nanopi-r4s.manifest
 EOF

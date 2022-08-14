@@ -1,8 +1,3 @@
-# REPO_TOKEN密匙制作教程：https://git.io/jm.md
-#
-#
-
-
 name: compile
 on:
   workflow_dispatch:
@@ -10,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/nanopi_r2c/start-up/start'
+      - 'build/nanopi_r2s/start-up/start'
 
 env:
   Github: https://github.com/${{github.repository}}
@@ -34,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [nanopi_r2c]
+        target: [nanopi_r2s]
         
         # [Lede_source,Lienol_source,Mortal_source,Tianling_source,openwrt_amlogic]
 
@@ -51,7 +46,7 @@ jobs:
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_repo_url
         source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_settings
     
-    - name: 部署编译
+    - name: 部署环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -78,21 +73,15 @@ jobs:
       if: env.USE_CACHEWRTBUILD == 'true'
       uses: klever1988/cachewrtbuild@test
       with:
-       ccache: 'true'
-       #是否跳过工具链编译
-       skip: false
-       #清空缓存
-       clean: false
-       #是否缓存工具链目录
-       toolchain: true
-       prefix: ${{ github.workspace }}/openwrt
+        ccache: 'true'
+        prefix: ${{ github.workspace }}/openwrt
 
     - name: 生成配置
       run: |
         cd openwrt
         source $BUILD_PATH/common.sh && Diy_menu2
         
-    - name: 在线更新
+    - name: 启用在线更新
       continue-on-error: true
       if: env.REGULAR_UPDATE == 'true' && env.REPO_TOKEN
       run: |
@@ -130,7 +119,7 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE
         source $BUILD_PATH/common.sh && Package_amlogic
-    - name: 整理固件
+    - name: 整理文件夹
       continue-on-error: true
       id: organizer
       run: |
@@ -197,7 +186,7 @@ jobs:
         overwrite: true
         file_glob: true
 
-    - name: 信息通知
+    - name: 电报机器人或pushplus信息通知
       continue-on-error: true
       if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TG'
       run: |

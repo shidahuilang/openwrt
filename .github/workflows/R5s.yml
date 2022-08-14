@@ -1,4 +1,4 @@
-name: R4s
+name: R5s
 on:
   workflow_dispatch:
     inputs:

@@ -54,6 +54,8 @@ sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH
 # 删除默认防火墙
 sed -i '/to-ports 53/d' $ZZZ_PATH
 
+# 拉取旧版OpenClash固件
+# svn co https://github.com/shidahuilang/OpenClash package/luci-app-xiaolaoshu
 
 # 取消路由器每天跑分任务
 #sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"

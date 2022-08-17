@@ -95,5 +95,5 @@ rm -rf config.buildinfo
 rm -rf feeds.buildinfo
 rm -rf sha256sums
 rm -rf version.buildinfo
-rm -rf armv8-friendlyarm_nanopi-r2c.manifest
+rm -rf rockchip-armv8-friendlyelec_nanopi-r2c.manifest
 EOF

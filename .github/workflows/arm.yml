@@ -1,4 +1,4 @@
-name: R2s+R4s
+name: arm
 on:
   workflow_dispatch:
     inputs:

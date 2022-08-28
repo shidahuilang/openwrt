@@ -98,7 +98,7 @@ jobs:
         if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/X86.yml" 2>/dev/null)" ]]; then
           git rm -rf $GITHUB_WORKSPACE/repogx/.github/workflows/X86.yml
         fi
-        cp -Rf $GITHUB_WORKSPACE/shangyou/.github/workflows/LEDE-X86.yml .github/workflows/LEDE-X86.yml
+        cp -Rf $GITHUB_WORKSPACE/shangyou/.github/workflows/X86.yml .github/workflows/X86.yml
         git rm -rf $GITHUB_WORKSPACE/repogx/.github/workflows/${{env.BILDYML}}
         cp -Rf $GITHUB_WORKSPACE/shangyou/.github/workflows/synchronization.yml .github/workflows/synchronization.yml
         if [[ -f build/Lede_source/diy-part.sh ]];then

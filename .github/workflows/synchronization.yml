@@ -37,38 +37,32 @@ jobs:
         cd $GITHUB_WORKSPACE
         git clone -b main https://github.com/shidahuilang/openwrt.git shangyou
         git clone -b main https://github.com/${{github.repository}}.git repogx
-        if [[ -d repogx/build/Lede_source ]];then
-          rm -rf shangyou/build/Lede_source/.config
-        fi
-        if [[ -d repogx/build/Lienol_source ]];then
-          rm -fr shangyou/build/Lienol_source/.config
-        fi
-        if [[ -d repogx/build/Mortal_source ]];then
-          rm -fr shangyou/build/Mortal_source/.config
-        fi
-        if [[ -d repogx/build/Tianling_source ]];then
-          rm -fr shangyou/build/Tianling_source/.config
-        fi
-        if [[ -d repogx/build/openwrt_amlogic ]];then
-          rm -fr shangyou/build/openwrt_amlogic/.config
-        fi
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/LEDE-X86.yml" 2>/dev/null)" ]]; then
-          echo "CRON2=$(grep -A 1 'schedule:' repogx/.github/workflows/LEDE-X86.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-          echo "CRON1=$(grep -A 1 'schedule:' shangyou/.github/workflows/LEDE-X86.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-          if [[ `grep 'cron:' repogx/.github/workflows/LEDE-X86.yml |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
-            sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/LEDE-X86.yml
-            sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/LEDE-X86.yml
+        
+        rm -rf ${GITHUB_WORKSPACE}/shangyou/build/*/.config
+        cp -Rf $GITHUB_WORKSPACE/shangyou/README.md $GITHUB_WORKSPACE/repogx/README.md
+        cp -Rf $GITHUB_WORKSPACE/shangyou/LICENSE $GITHUB_WORKSPACE/repogx/LICENSE
+        for X in $(find ${GITHUB_WORKSPACE}/repogx/build -name "diy-part.sh" |sed 's/\/diy-part.sh//g'); do mv "${X}"/diy-part.sh "${X}"/diy-part.sh.bak; done
+        for X in $(find ${GITHUB_WORKSPACE}/repogx/build -name "settings.ini" |sed 's/\/settings.ini//g'); do mv "${X}"/settings.ini "${X}"/settings.ini.bak; done
+        for X in $(grep "\"LEDE\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/Lede_source/* "${X}"; done
+        for X in $(grep "\"LIENOL\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/Lienol_source/* "${X}"; done
+        for X in $(grep "\"IMMORTAL\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/Mortal_source/* "${X}"; done
+        for X in $(grep "\"TIANLING\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/Tianling_source/* "${X}"; done
+        [[ -d ${GITHUB_WORKSPACE}/repogx/build/openwrt_amlogic ]] && cp -Rf ${GITHUB_WORKSPACE}/shangyou/build/openwrt_amlogic/* ${GITHUB_WORKSPACE}/repogx/build/openwrt_amlogic/
+        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/X86.yml" 2>/dev/null)" ]]; then
+          echo "CRON2=$(grep -A 1 'schedule:' repogx/.github/workflows/X86.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          echo "CRON1=$(grep -A 1 'schedule:' shangyou/.github/workflows/X86.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          if [[ `grep 'cron:' repogx/.github/workflows/X86.yml |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
+            sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/X86.yml
+            sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/X86.yml
           fi
-          echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/LEDE-X86.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-          echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/LEDE-X86.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+          echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/X86.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+          echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/X86.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
           echo "QIDONG1=$(grep -A 1 'paths:' shangyou/.github/workflows/compile.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')" >> $GITHUB_ENV
           echo "QIDONG2=- 'config'" >> $GITHUB_ENV
           echo "TARGE1=$(grep 'target: \[' shangyou/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
           echo "TARGE2=$(grep 'target: \[' repogx/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-          echo "BEIYONG1=$(grep -A 2 'target:' shangyou/.github/workflows/LEDE-X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
-          echo "BEIYONG2=$(grep -A 2 'target:' repogx/.github/workflows/LEDE-X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
-          echo "QDMAME1=$(sed -n '1,50p' shangyou/.github/workflows/LEDE-X86.yml |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
-          echo "QDMAME2=$(sed -n '1,50p' repogx/.github/workflows/LEDE-X86.yml |grep '^name' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          echo "BEIYONG1=$(grep -A 2 'target:' shangyou/.github/workflows/X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
+          echo "BEIYONG2=$(grep -A 2 'target:' repogx/.github/workflows/X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
         fi
         
     - name: 同步上游仓库
@@ -77,16 +71,16 @@ jobs:
         cd $GITHUB_WORKSPACE
         if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/LEDE-X86.yml" 2>/dev/null)" ]]; then
           if [[ -n "${{env.QDMAME1}}" ]] && [[ -n "${{env.QDMAME2}}" ]]; then
-            sed -i "s/${{env.QDMAME1}}/${{env.QDMAME2}}/g" shangyou/.github/workflows/LEDE-X86.yml
+            sed -i "s/${{env.QDMAME1}}/${{env.QDMAME2}}/g" shangyou/.github/workflows/X86.yml
           fi
           if [[ -n "${{env.BEIYONG1}}" ]] && [[ -n "${{env.BEIYONG2}}" ]]; then
-            sed -i "s/${{env.BEIYONG1}}/${{env.BEIYONG2}}/g" shangyou/.github/workflows/LEDE-X86.yml
+            sed -i "s/${{env.BEIYONG1}}/${{env.BEIYONG2}}/g" shangyou/.github/workflows/X86.yml
           fi
           if [[ -n "${{env.CRON1}}" ]] && [[ -n "${{env.CRON2}}" ]]; then
-            sed -i "s/${{env.CRON1}}/${{env.CRON2}}/g" shangyou/.github/workflows/LEDE-X86.yml
+            sed -i "s/${{env.CRON1}}/${{env.CRON2}}/g" shangyou/.github/workflows/X86.yml
           fi
           if [[ -n "${{env.TARGET1}}" ]] && [[ -n "${{env.TARGET2}}" ]]; then
-            sed -i "s/${{env.TARGET1}}/${{env.TARGET2}}/g" shangyou/.github/workflows/LEDE-X86.yml
+            sed -i "s/${{env.TARGET1}}/${{env.TARGET2}}/g" shangyou/.github/workflows/X86.yml
           fi
           if [[ -n "${{env.TARGE1}}" ]] && [[ -n "${{env.TARGE2}}" ]]; then
             sed -i "s/${{env.TARGE1}}/${{env.TARGE2}}/g" shangyou/.github/workflows/compile.yml
@@ -101,8 +95,8 @@ jobs:
           git rm -rf $GITHUB_WORKSPACE/repogx/.github/workflows/compile.yml
         fi
         cp -Rf $GITHUB_WORKSPACE/shangyou/.github/workflows/compile.yml .github/workflows/compile.yml
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/LEDE-X86.yml" 2>/dev/null)" ]]; then
-          git rm -rf $GITHUB_WORKSPACE/repogx/.github/workflows/LEDE-X86.yml
+        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/X86.yml" 2>/dev/null)" ]]; then
+          git rm -rf $GITHUB_WORKSPACE/repogx/.github/workflows/X86.yml
         fi
         cp -Rf $GITHUB_WORKSPACE/shangyou/.github/workflows/LEDE-X86.yml .github/workflows/LEDE-X86.yml
         git rm -rf $GITHUB_WORKSPACE/repogx/.github/workflows/${{env.BILDYML}}

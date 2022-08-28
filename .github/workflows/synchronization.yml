@@ -55,21 +55,21 @@ jobs:
             sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/X86.yml
             sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/X86.yml
           fi
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/R2S.yml" 2>/dev/null)" ]]; then
+        elif [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/R2S.yml" 2>/dev/null)" ]]; then
           echo "CRON2=$(grep -A 1 'schedule:' repogx/.github/workflows/R2S.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
           echo "CRON1=$(grep -A 1 'schedule:' shangyou/.github/workflows/R2S.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
           if [[ `grep 'cron:' repogx/.github/workflows/R2S.yml |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
             sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/R2S.yml
             sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/R2S.yml
           fi
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/R4S.yml" 2>/dev/null)" ]]; then
+        elif [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/R4S.yml" 2>/dev/null)" ]]; then
           echo "CRON2=$(grep -A 1 'schedule:' repogx/.github/workflows/R4S.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
           echo "CRON1=$(grep -A 1 'schedule:' shangyou/.github/workflows/R4S.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
           if [[ `grep 'cron:' repogx/.github/workflows/R4S.yml |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
             sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/R4S.yml
             sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/R4S.yml
           fi
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/R2C.yml" 2>/dev/null)" ]]; then
+        elif [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/R2C.yml" 2>/dev/null)" ]]; then
           echo "CRON2=$(grep -A 1 'schedule:' repogx/.github/workflows/R2C.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
           echo "CRON1=$(grep -A 1 'schedule:' shangyou/.github/workflows/R2C.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
           if [[ `grep 'cron:' repogx/.github/workflows/R2C.yml |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then

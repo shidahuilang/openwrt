@@ -69,7 +69,7 @@ jobs:
       if: env.REPO_TOKEN && (github.event.inputs.again-fork == 'fork')
       run: |
         cd $GITHUB_WORKSPACE
-        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/LEDE-X86.yml" 2>/dev/null)" ]]; then
+        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/X86.yml" 2>/dev/null)" ]]; then
           if [[ -n "${{env.QDMAME1}}" ]] && [[ -n "${{env.QDMAME2}}" ]]; then
             sed -i "s/${{env.QDMAME1}}/${{env.QDMAME2}}/g" shangyou/.github/workflows/X86.yml
           fi

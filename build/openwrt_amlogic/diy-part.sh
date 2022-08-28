@@ -22,12 +22,12 @@ uci set system.@system[0].hostname='OpenWrt-123'              # 修改主机名�
 #uci set ttyd.@ttyd[0].command='/bin/login -f root'           # 设置ttyd免帐号登录（去掉uci前面的#生效）
 
 # 如果有用IPV6的话,可以使用以下命令创建IPV6客户端(LAN口)（去掉全部代码uci前面#号生效）
-#uci set network.ipv6=interface
-#uci set network.ipv6.proto='dhcpv6'
-#uci set network.ipv6.ifname='@lan'
-#uci set network.ipv6.reqaddress='try'
-#uci set network.ipv6.reqprefix='auto'
-#uci set firewall.@zone[0].network='lan ipv6'
+uci set network.ipv6=interface
+uci set network.ipv6.proto='dhcpv6'
+uci set network.ipv6.ifname='@lan'
+uci set network.ipv6.reqaddress='try'
+uci set network.ipv6.reqprefix='auto'
+uci set firewall.@zone[0].network='lan ipv6'
 EOF
 
 

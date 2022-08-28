@@ -78,11 +78,8 @@ jobs:
           fi		  
           echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/X86.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
           echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/X86.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-		  echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/R2S.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+          echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/R2S.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
           echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/R2S.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-		  echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/R4S.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-          echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/R4S.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
-		  echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/R2C.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
           echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/R2C.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV		  
           echo "QIDONG1=$(grep -A 1 'paths:' shangyou/.github/workflows/compile.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')" >> $GITHUB_ENV
           echo "QIDONG2=- 'config'" >> $GITHUB_ENV

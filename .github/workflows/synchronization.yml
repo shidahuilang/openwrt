@@ -44,6 +44,9 @@ jobs:
         for X in $(find ${GITHUB_WORKSPACE}/repogx/build -name "diy-part.sh" |sed 's/\/diy-part.sh//g'); do mv "${X}"/diy-part.sh "${X}"/diy-part.sh.bak; done
         for X in $(find ${GITHUB_WORKSPACE}/repogx/build -name "settings.ini" |sed 's/\/settings.ini//g'); do mv "${X}"/settings.ini "${X}"/settings.ini.bak; done
         for X in $(grep "\"LEDE\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/Lede_source/* "${X}"; done
+		for X in $(grep "\"LEDE\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/nanopi_r2s/* "${X}"; done
+		for X in $(grep "\"LEDE\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/nanopi_r4s/* "${X}"; done
+		for X in $(grep "\"LEDE\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/nanopi_r2c/* "${X}"; done
         for X in $(grep "\"LIENOL\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/Lienol_source/* "${X}"; done
         for X in $(grep "\"IMMORTAL\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/Mortal_source/* "${X}"; done
         for X in $(grep "\"TIANLING\"" -rl "${GITHUB_WORKSPACE}/repogx/build" |grep "settings.ini" |sed 's/\/settings.*//g' |uniq); do cp -Rf shangyou/build/Tianling_source/* "${X}"; done
@@ -55,14 +58,47 @@ jobs:
             sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/X86.yml
             sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/X86.yml
           fi
+        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/R2S.yml" 2>/dev/null)" ]]; then
+          echo "CRON2=$(grep -A 1 'schedule:' repogx/.github/workflows/R2S.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          echo "CRON1=$(grep -A 1 'schedule:' shangyou/.github/workflows/R2S.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          if [[ `grep 'cron:' repogx/.github/workflows/R2S.yml |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
+            sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/R2S.yml
+            sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/R2S.yml
+          fi
+        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/R4S.yml" 2>/dev/null)" ]]; then
+          echo "CRON2=$(grep -A 1 'schedule:' repogx/.github/workflows/R4S.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          echo "CRON1=$(grep -A 1 'schedule:' shangyou/.github/workflows/R4S.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          if [[ `grep 'cron:' repogx/.github/workflows/R4S.yml |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
+            sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/R4S.yml
+            sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/R4S.yml
+          fi
+        if [[ -n "$(ls -A "$GITHUB_WORKSPACE/repogx/.github/workflows/R2C.yml" 2>/dev/null)" ]]; then
+          echo "CRON2=$(grep -A 1 'schedule:' repogx/.github/workflows/R2C.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |cut -d "#" -f1 |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          echo "CRON1=$(grep -A 1 'schedule:' shangyou/.github/workflows/R2C.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed s/^#// |sed 's/^[ ]*//g' |sed 's/\//\\&/g' |sed 's/\*/\\&/g')" >> $GITHUB_ENV
+          if [[ `grep 'cron:' repogx/.github/workflows/R2C.yml |sed 's/^[ ]*//g' |grep '^-\ cron'` ]]; then
+            sed -i 's/^#\(.*schedule:\)/\1/' shangyou/.github/workflows/R2C.yml
+            sed -i 's/^#\(.*- cron:\)/\1/' shangyou/.github/workflows/R2C.yml
+          fi		  
           echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/X86.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
           echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/X86.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+		  echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/R2S.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+          echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/R2S.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+		  echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/R4S.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+          echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/R4S.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+		  echo "TARGET1=$(grep 'target: \[' shangyou/.github/workflows/R2C.yml  |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
+          echo "TARGET2=$(grep 'target: \[' repogx/.github/workflows/R2C.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV		  
           echo "QIDONG1=$(grep -A 1 'paths:' shangyou/.github/workflows/compile.yml |awk 'NR==2' |sed 's/^[ ]*//g' |sed 's/\//\\&/g')" >> $GITHUB_ENV
           echo "QIDONG2=- 'config'" >> $GITHUB_ENV
           echo "TARGE1=$(grep 'target: \[' shangyou/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
           echo "TARGE2=$(grep 'target: \[' repogx/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')" >> $GITHUB_ENV
           echo "BEIYONG1=$(grep -A 2 'target:' shangyou/.github/workflows/X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
           echo "BEIYONG2=$(grep -A 2 'target:' repogx/.github/workflows/X86.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
+          echo "BEIYONG1=$(grep -A 2 'target:' shangyou/.github/workflows/R2S.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
+          echo "BEIYONG2=$(grep -A 2 'target:' repogx/.github/workflows/R2S.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
+          echo "BEIYONG1=$(grep -A 2 'target:' shangyou/.github/workflows/R4S.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
+          echo "BEIYONG2=$(grep -A 2 'target:' repogx/.github/workflows/R4S.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
+          echo "BEIYONG1=$(grep -A 2 'target:' shangyou/.github/workflows/R2C.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV
+          echo "BEIYONG2=$(grep -A 2 'target:' repogx/.github/workflows/R2C.yml |grep '\# \[.*\]' | sed -r 's/\# \[(.*)\]/\1/' |sed 's/^[ ]*//g')" >> $GITHUB_ENV			  
         fi
         
     - name: 同步上游仓库

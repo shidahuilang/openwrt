@@ -35,5 +35,12 @@ cd openwrt && make menuconfig
 ![img2.png](img/img2.png)
 ![img3.png](img/img3.png)
 
+鸣谢！
+感谢以下各位大佬（排名无分先后)
+[`coolsnowwolf`]
+[`Lienol`]
+[`immortalwrt`]
+[`P3TERX`]
+[`Hyy2001X`]
 
 

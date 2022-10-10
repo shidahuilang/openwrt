@@ -30,7 +30,8 @@ cd openwrt && make menuconfig
 
 ## 自动更新固件
 ![img.png](img/img.png)
-![img1.png](img/img1.png)
+![1.png](img/1.png)
+![2.png](img/2.png)
 ![img2.png](img/img2.png)
 ![img3.png](img/img3.png)
 

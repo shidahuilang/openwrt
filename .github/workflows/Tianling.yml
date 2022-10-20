@@ -1,4 +1,4 @@
-name: Tianling_source
+name: Tianling
 on:
   workflow_dispatch:
     inputs:

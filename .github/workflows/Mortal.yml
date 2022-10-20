@@ -1,4 +1,4 @@
-name: Mortal_source
+name: Mortal
 on:
   workflow_dispatch:
     inputs:

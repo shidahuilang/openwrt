@@ -179,11 +179,19 @@ jobs:
         source $BUILD_PATH/upgrade.sh && GET_TARGET_INFO
         source $BUILD_PATH/common.sh && Diy_xinxi
     
+    - name: 清理Actions空间
+      if: env.REPO_TOKEN
+      uses: Mattraks/delete-workflow-runs@v2
+      with:
+          token: ${{ secrets.REPO_TOKEN }}
+          repository: ${{ github.repository }}
+          keep_minimum_runs: 0
+          retain_days: ${{ env.retain_days }}    
 
     
     - name: 删除releases
       if: env.REPO_TOKEN
-      uses: dev-drprasad/delete-older-releases@master
+      uses: shidahuilang/delete-older-releases@main
       with:
         repo: ${{ github.repository }}
         keep_latest: ${{ env.keep_latest }}

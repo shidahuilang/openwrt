@@ -125,7 +125,7 @@ jobs:
     - name: 上传.config配置文件在 github actions
       continue-on-error: true
       if: env.UPLOAD_CONFIG == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@main
       with:
         name: .config_${{ env.SOURCE }}_${{ env.TARGET_PROFILE }}_${{ env.Firmware_Date }}
         path: config.txt
@@ -183,7 +183,7 @@ jobs:
     
     - name: 清理Actions空间
       if: env.REPO_TOKEN
-      uses: Mattraks/delete-workflow-runs@main
+      uses: Mattraks/delete-workflow-runs@v2
       with:
           token: ${{ secrets.REPO_TOKEN }}
           repository: ${{ github.repository }}
@@ -192,7 +192,7 @@ jobs:
     
     - name: 删除releases
       if: env.REPO_TOKEN
-      uses: dev-drprasad/delete-older-releases@master
+      uses: shidahuilang/delete-older-releases@main
       with:
         repo: ${{ github.repository }}
         keep_latest: ${{ env.keep_latest }}

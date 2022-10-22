@@ -1,3 +1,4 @@
+# REPO_TOKEN密匙制作教程：https://git.io/jm.md
 name: compile
 on:
   workflow_dispatch:

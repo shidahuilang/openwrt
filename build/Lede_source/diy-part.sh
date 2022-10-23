@@ -57,6 +57,9 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 # 拉取旧版OpenClash固件
 # svn co https://github.com/shidahuilang/OpenClash package/luci-app-xiaolaoshu
 
+# 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
+export OpenClash_branch='master'
+
 # 取消路由器每天跑分任务
 #sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"
 

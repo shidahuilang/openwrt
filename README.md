@@ -38,6 +38,7 @@ cd openwrt && make menuconfig
  ### 鸣谢！
  感谢以下各位大佬（排名无分先后）<br />
 [`coolsnowwolf`]
+[`danshui`]
 [`Lienol`]
 [`immortalwrt`]
 [`P3TERX`]

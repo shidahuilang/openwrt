@@ -46,6 +46,9 @@ sed -i "s/OpenWrt /大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PAT
 # 拉取旧版OpenClash固件
 # svn co https://github.com/shidahuilang/OpenClash package/luci-app-xiaolaoshu
 
+# 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
+export OpenClash_branch='master'
+
 # 设置首次登录后台密码为空（进入openwrt后自行修改密码）
 sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH
 

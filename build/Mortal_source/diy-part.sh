@@ -43,6 +43,8 @@ sed -i "s/OpenWrt /大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PAT
 # 拉取旧版OpenClash固件
 # svn co https://github.com/shidahuilang/OpenClash package/luci-app-xiaolaoshu
 
+
+
 # 设置首次登录后台密码为空（进入openwrt后自行修改密码）
 sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH
 
@@ -55,7 +57,7 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 # sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$BASE_PATH/etc/rc.local"
 
 # 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
-echo "OpenClash_branch" > master
+export OpenClash_branch='master'
 
 # x86机型,默认内核5.15，修改内核为5.18（源码时时变,自行根据target/linux/x86/Makefile文件修改）
 #sed -i 's/PATCHVER:=5.15/PATCHVER:=5.18/g' target/linux/x86/Makefile

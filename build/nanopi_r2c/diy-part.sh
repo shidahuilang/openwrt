@@ -46,10 +46,6 @@ sed -i "s/OpenWrt /大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ_PAT
 # 拉取旧版OpenClash固件
 # svn co https://github.com/shidahuilang/OpenClash package/luci-app-xiaolaoshu
 
-# 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
-export OpenClash_branch='master'
-
-
 # 设置首次登录后台密码为空（进入openwrt后自行修改密码）
 sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ_PATH
 
@@ -70,6 +66,8 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 # x86机型,默认内核5.15，修改内核为5.18（源码时时变,自行根据target/linux/x86/Makefile文件修改）
 sed -i 's/PATCHVER=5.19/PATCHVER=5.19/g' target/linux/rockchip/Makefile
 
+# 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
+export OpenClash_branch='master'
 
 # K3专用，编译K3的时候只会出K3固件（其他机型也适宜,把phicomm_k3替换一下，名字要绝对正确才行）
 #sed -i 's|^TARGET_|# TARGET_|g; s|# TARGET_DEVICES += phicomm_k3|TARGET_DEVICES += phicomm_k3|' target/linux/bcm53xx/image/Makefile
@@ -94,7 +92,7 @@ sed -i 's/"带宽监控"/"监控"/g' `grep "带宽监控" -rl ./`
 
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间（根据编译机型变化,自行调整需要删除的固件名称）
-cat >${GITHUB_WORKSPACE}/Clear <<-EOF
+cat >"$CLEAR_PATH" <<-EOF
 rm -rf config.buildinfo
 rm -rf feeds.buildinfo
 rm -rf sha256sums

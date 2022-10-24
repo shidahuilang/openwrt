@@ -1,4 +1,10 @@
-name: R2c
+#
+#
+# REPO_TOKEN密匙制作教程：https://git.io/jm.md
+#
+#
+
+name: nanopi_r2c
 on:
   workflow_dispatch:
     inputs:
@@ -18,7 +24,7 @@ on:
 
 # 定时触发开启开始编译(把下面两个#去掉开启,时间设置请看定时开启编译说明)
 #  schedule:
-#   - cron: 0 9 * * *
+#   - cron: 30 8 * * *
 
 env:
   Github: https://github.com/${{github.repository}}
@@ -57,17 +63,17 @@ jobs:
         git clone --depth 1 -b main https://github.com/shidahuilang/common ${GITHUB_WORKSPACE}/build/common
         mv -f ${GITHUB_WORKSPACE}/build/common/*.sh ${GITHUB_WORKSPACE}/build/${{matrix.target}}/
         chmod -R +x ${GITHUB_WORKSPACE}/build
-        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_repo_url
-        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_settings
+        source ${GITHUB_WORKSPACE}/build/${{matrix.target}}/common.sh && Diy_repo_url
+        source ${GITHUB_WORKSPACE}/build/${{matrix.target}}/common.sh && Diy_settings
         
     - name: 定时启动编译时清理Actions空间和删除releases数值设置
       run: |
          if [[ -z "${{ github.event.inputs.days }}" ]] && [[ -z "${{ github.event.inputs.rele }}" ]]; then
-           echo "retain_days=7" >> $GITHUB_ENV
-           echo "keep_latest=10" >> $GITHUB_ENV
+           echo "retain_days=7" >> ${GITHUB_ENV}
+           echo "keep_latest=10" >> ${GITHUB_ENV}
          else
-           echo "retain_days=${{ github.event.inputs.days }}" >> $GITHUB_ENV
-           echo "keep_latest=${{ github.event.inputs.rele }}" >> $GITHUB_ENV
+           echo "retain_days=${{ github.event.inputs.days }}" >> ${GITHUB_ENV}
+           echo "keep_latest=${{ github.event.inputs.rele }}" >> ${GITHUB_ENV}
          fi
         
     - name: 部署编译环境
@@ -88,22 +94,22 @@ jobs:
       continue-on-error: true
       working-directory: /${{matrix.target}}
       run: |
-        git clone -b "$REPO_BRANCH" --single-branch "$REPO_URL" openwrt
-        ln -sf /${{matrix.target}}/openwrt $GITHUB_WORKSPACE/openwrt
+        git clone -b "${REPO_BRANCH}" --single-branch "${REPO_URL}" openwrt
+        ln -sf /${{matrix.target}}/openwrt ${GITHUB_WORKSPACE}/openwrt
  
     - name: 公 告
       continue-on-error: true
       run: |
         echo
-        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_variable
-        source $GITHUB_WORKSPACE/build/${{matrix.target}}/common.sh && Diy_Notice
+        source ${GITHUB_WORKSPACE}/build/${{matrix.target}}/common.sh && Diy_variable
+        source ${GITHUB_WORKSPACE}/build/${{matrix.target}}/common.sh && Diy_Notice
  
     - name: 加载源,补丁和自定义设置
       id: compile
       continue-on-error: true
       run: |
         cd openwrt
-        source $BUILD_PATH/common.sh && Diy_menu
+        source ${BUILD_PATH}/common.sh && Diy_menu
         
     - name: SSH远程连接（制作.config配置文件）
       if: env.SSH_ACTIONS == 'true' || (github.event.inputs.ssh == 'ssh')
@@ -116,7 +122,7 @@ jobs:
       continue-on-error: true
       run: |
         cd openwrt
-        source $BUILD_PATH/common.sh && Diy_menu2
+        source ${BUILD_PATH}/common.sh && Diy_menu2
         ./scripts/diffconfig.sh > ${GITHUB_WORKSPACE}/${CONFIG_FILE}
         cp -Rf ${GITHUB_WORKSPACE}/${CONFIG_FILE} ${GITHUB_WORKSPACE}/config.txt
         
@@ -133,7 +139,7 @@ jobs:
       continue-on-error: true
       if: steps.clone.outcome == 'success' && steps.compile.outcome == 'success' && env.REPO_TOKEN
       run: |
-        cd $GITHUB_WORKSPACE
+        cd ${GITHUB_WORKSPACE}
         git clone -b main https://github.com/${{github.repository}}.git ${{matrix.target}}
         export TARGE1="$(grep 'target: \[' ${{matrix.target}}/.github/workflows/compile.yml |sed 's/^[ ]*//g' |grep '^target' |cut -d '#' -f1 |sed 's/\[/\\&/' |sed 's/\]/\\&/')"
         export TARGE2="target: \\[${{matrix.target}}\\]"
@@ -143,7 +149,7 @@ jobs:
           sed -i "s/${QIDONG1}/${QIDONG2}/g" ${{matrix.target}}/.github/workflows/compile.yml
           sed -i "s/${TARGE1}/${TARGE2}/g" ${{matrix.target}}/.github/workflows/compile.yml
         fi
-        cp -Rf $GITHUB_WORKSPACE/${CONFIG_FILE} ${{matrix.target}}/build/${{matrix.target}}/${{env.CONFIG_FILE}}
+        cp -Rf ${GITHUB_WORKSPACE}/${CONFIG_FILE} ${{matrix.target}}/build/${{matrix.target}}/${{env.CONFIG_FILE}}
         mkdir -p ${{matrix.target}}/build/${{matrix.target}}/start-up
         echo "${{ env.SOURCE }}$(date +%Y年%m月%d号%H时%M分%S秒)" > ${{matrix.target}}/build/${{matrix.target}}/start-up/start
         cd ${{matrix.target}}
@@ -154,7 +160,7 @@ jobs:
     - name: 电报机器人或pushplus信息通知
       if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TG'
       run: |
-        if [[ "${SERVERCHAN_SCKEY}" == "TG" ]]; then
+        if [[ "${{ env.SERVERCHAN_SCKEY }}" == "TG" ]]; then
           if [[ "${{steps.clone.outcome}}" == 'success' ]] && [[ "${{steps.gitpush.outcome}}" == 'success' ]] && [[ "${{steps.compile.outcome}}" == 'success' ]]; then
             curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.Tongzhi_Date}})" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
           else
@@ -162,7 +168,7 @@ jobs:
             exit 1
           fi
         fi
-        if [[ "${SERVERCHAN_SCKEY}" == "PUSH" ]]; then
+        if [[ "${{ env.SERVERCHAN_SCKEY }}" == "PUSH" ]]; then
           if [[ "${{steps.clone.outcome}}" == 'success' ]] && [[ "${{steps.gitpush.outcome}}" == 'success' ]] && [[ "${{steps.compile.outcome}}" == 'success' ]]; then
             curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="开始编译【${{matrix.target}}】" --data "content=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.Tongzhi_Date}})" "http://www.pushplus.plus/send"
           else
@@ -176,8 +182,8 @@ jobs:
       if: env.BY_INFORMATION == 'true'
       run: |
         cd openwrt
-        source $BUILD_PATH/upgrade.sh && GET_TARGET_INFO
-        source $BUILD_PATH/common.sh && Diy_xinxi
+        source ${BUILD_PATH}/upgrade.sh && GET_TARGET_INFO
+        source ${BUILD_PATH}/common.sh && Diy_xinxi
     
     - name: 清理Actions空间
       if: env.REPO_TOKEN
@@ -185,8 +191,8 @@ jobs:
       with:
           token: ${{ secrets.REPO_TOKEN }}
           repository: ${{ github.repository }}
-          keep_minimum_runs: 0
           retain_days: ${{ env.retain_days }}
+          keep_minimum_runs: 0
     
     - name: 删除releases
       if: env.REPO_TOKEN

@@ -4,7 +4,7 @@
 #
 #
 
-name: nanopi_r2s
+name: Rockchip
 on:
   workflow_dispatch:
     inputs:

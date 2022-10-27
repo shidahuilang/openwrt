@@ -80,7 +80,7 @@ jobs:
         cd openwrt
         source ${BUILD_PATH}/common.sh && Diy_menu
     
-    - name: 混合缓存生成
+    - name: 混合缓存密钥
       id: gen_cache_mixkey
       working-directory: ${{ github.workspace }}/openwrt
       run: |

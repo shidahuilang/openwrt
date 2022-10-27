@@ -15,19 +15,19 @@ uci set network.lan.netmask='255.255.255.0'                   # IPv4 子网掩�
 #uci set network.lan.dns='223.5.5.5 114.114.114.114'          # 旁路由设置 DNS(多个DNS要用空格分开)（去掉uci前面的#生效）
 uci set network.lan.delegate='0'                              # 去掉LAN口使用内置的 IPv6 管理(若用IPV6请把'0'改'1')
 uci set dhcp.@dnsmasq[0].filter_aaaa='1'                      # 禁止解析 IPv6 DNS记录(若用IPV6请把'1'改'0')
-
-uci set dhcp.lan.ignore='1'                                  # 旁路由关闭DHCP功能（去掉uci前面的#生效）
+#uci set dhcp.lan.ignore='1'                                  # 旁路由关闭DHCP功能（去掉uci前面的#生效）
 #uci delete network.lan.type                                  # 旁路由去掉桥接模式（去掉uci前面的#生效）
-uci set system.@system[0].hostname='OpenWrt'              # 修改主机名称为OpenWrt-123
+uci set system.@system[0].hostname='OpenWrt'                  # 修改主机名称为OpenWrt
 #uci set ttyd.@ttyd[0].command='/bin/login -f root'           # 设置ttyd免帐号登录（去掉uci前面的#生效）
 
+
 # 如果有用IPV6的话,可以使用以下命令创建IPV6客户端(LAN口)（去掉全部代码uci前面#号生效）
-uci set network.ipv6=interface
-uci set network.ipv6.proto='dhcpv6'
-uci set network.ipv6.ifname='@lan'
-uci set network.ipv6.reqaddress='try'
-uci set network.ipv6.reqprefix='auto'
-uci set firewall.@zone[0].network='lan ipv6'
+#uci set network.ipv6=interface
+#uci set network.ipv6.proto='dhcpv6'
+#uci set network.ipv6.ifname='@lan'
+#uci set network.ipv6.reqaddress='try'
+#uci set network.ipv6.reqprefix='auto'
+#uci set firewall.@zone[0].network='lan ipv6'
 EOF
 
 
@@ -64,10 +64,7 @@ export OpenClash_branch='master'
 # s905x3 s905d s912 a311d s922x s922x-n2 s922x-reva s905x3 s905x3-b s905x2
 # s912-m8s s905d s905d-ki s905x s905w s905 s905l3a s905x2-km3 s912
 # 可选内核 （5.4） （5.10） （5.15） （5.19） （6.0）
-
-
-# 当前可用机型 s922x s922x-n2 s922x-reva a311d s905x3 s905x2 s905x2-km3 s905l3a s912 s912-m8s s905d s905d-ki s905x s905w s905
-#amlogic_model=s905x3_s905x2_s905x_s905w_s905d_s922x_s912
+#打包示例：amlogic_model=s905x3_s905x2_s905x_s905w_s905d_s922x_s912
 
 cat >"$AMLOGIC_SH_PATH" <<-EOF
 amlogic_model=s905d

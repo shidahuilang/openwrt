@@ -82,7 +82,7 @@ jobs:
     
     - name: 混合缓存密钥
       id: gen_cache_mixkey
-      working-directory: ${{ github.workspace }}/openwrt
+      working-directory: /${{matrix.target}}
       run: |
         target_device_arch_1="x86_64"
         target_device_arch_2="rockchip"

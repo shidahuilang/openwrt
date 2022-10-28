@@ -100,7 +100,7 @@ jobs:
       with:
           ccache: 'true'
           mixkey: ${{ steps.gen_cache_mixkey.outputs.mixkey1 }}
-          prefix: ${GITHUB_WORKSPACE}/openwrt
+          prefix: 'openwrt'
           skip_saving: 'true'
       
     - name: 超级加速2
@@ -109,7 +109,7 @@ jobs:
       with:
           ccache: 'true'
           mixkey: ${{ steps.gen_cache_mixkey.outputs.mixkey2 }}
-          prefix: ${GITHUB_WORKSPACE}/openwrt
+          prefix: 'openwrt'
           skip_saving: 'true'
 
     - name: 生成配置

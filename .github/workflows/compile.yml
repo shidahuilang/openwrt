@@ -99,7 +99,7 @@ jobs:
       uses: HiGarfield/cachewrtbuild@main
       with:
           ccache: 'true'
-          mixkey: 'x86_64'
+          mixkey: ${{ steps.gen_cache_mixkey.outputs.mixkey1 }}
           prefix: ${{ github.workspace }}/openwrt
           skip_saving: 'true'
       
@@ -108,7 +108,7 @@ jobs:
       uses: HiGarfield/cachewrtbuild@main
       with:
           ccache: 'true'
-          mixkey: 'rockchip_armv8'
+          mixkey: ${{ steps.gen_cache_mixkey.outputs.mixkey2 }}
           prefix: ${{ github.workspace }}/openwrt
           skip_saving: 'true'
 

@@ -91,8 +91,8 @@ jobs:
         mixkey1="${target_device_arch_1}-${gcc_hash}-${ldd_hash}"
         mixkey2="${target_device_arch_2}-${gcc_hash}-${ldd_hash}"
        
-        #echo "mixkey1=$mixkey1" >> $GITHUB_OUTPUT
-        #echo "mixkey2=$mixkey2" >> $GITHUB_OUTPUT
+        echo "mixkey1=$mixkey1" >> $GITHUB_OUTPUT
+        echo "mixkey2=$mixkey2" >> $GITHUB_OUTPUT
         
     - name: 超级加速1
       if: env.USE_CACHEWRTBUILD == 'true'

@@ -86,30 +86,30 @@ jobs:
       run: |
         #target_device_arch_1="x86_64"
         #target_device_arch_2="rockchip_armv8"
-        gcc_hash=$(gcc --version | sha256sum | awk '{print substr($1,1,8)}')
-        ldd_hash=$(ldd --version | sha256sum | awk '{print substr($1,1,8)}')
+        #gcc_hash=$(gcc --version | sha256sum | awk '{print substr($1,1,8)}')
+        #ldd_hash=$(ldd --version | sha256sum | awk '{print substr($1,1,8)}')
         #mixkey1="${target_device_arch_1}-${gcc_hash}-${ldd_hash}"
         #mixkey2="${target_device_arch_2}-${gcc_hash}-${ldd_hash}"
        
         #echo "mixkey1=$mixkey1" >> $GITHUB_OUTPUT
         #echo "mixkey2=$mixkey2" >> $GITHUB_OUTPUT
         
-    - name: 超级加速1
-      if: env.USE_CACHEWRTBUILD == 'true'
-      uses: HiGarfield/cachewrtbuild@main
-      with:
-          ccache: 'true'
-          mixkey: ${{ steps.gen_cache_mixkey.outputs.mixkey1 }}
-          prefix: ${{ github.workspace }}/openwrt
-          skip_saving: 'true'
+    #- name: 超级加速1
+     # if: env.USE_CACHEWRTBUILD == 'true'
+     # uses: HiGarfield/cachewrtbuild@main
+     # with:
+       #   ccache: 'true'
+       #   mixkey: ${{ steps.gen_cache_mixkey.outputs.mixkey1 }}
+       #   prefix: ${{ github.workspace }}/openwrt
+       #   skip_saving: 'true'
       
     - name: 超级加速2
       if: env.USE_CACHEWRTBUILD2 == 'true'
       uses: HiGarfield/cachewrtbuild@main
       with:
           ccache: 'true'
-          mixkey: ${{ steps.gen_cache_mixkey.outputs.mixkey2 }}
-          prefix: ${{ github.workspace }}/openwrt
+          mixkey: 'x86_64'
+          prefix: 'openwrt'
           skip_saving: 'true'
 
     - name: 生成配置

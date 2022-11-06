@@ -1,8 +1,8 @@
 ## `【大灰狼独家优化】（IPV6大全版  5.18 内核【带DOCKER】`
 
 - 大灰狼编译库X86-R2C-R2S-R4S-R5S-N1-小米MI等多系列全部适配OTA自动升级
-- 默认IP地址：192.168.2.1
-- 账户：root   密码：空
+- 默认IP地址：`192.168.2.1`
+- 账户：`root`   密码：`空`
  
  ## [`固件下载地址`](https://github.com/shidahuilang/openwrt/releases/tag/AutoUpdate)
  ## [`插件下载地址`](https://github.com/shidahuilang/ipk/releases)

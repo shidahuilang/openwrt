@@ -4,7 +4,7 @@
 #
 #
 
-name: nanopi_r2c
+name: r2c
 on:
   workflow_dispatch:
     inputs:

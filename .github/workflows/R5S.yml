@@ -4,7 +4,7 @@
 #
 #
 
-name: nanopi_r5s
+name: r5s
 on:
   workflow_dispatch:
     inputs:

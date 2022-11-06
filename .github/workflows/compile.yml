@@ -83,10 +83,10 @@ jobs:
         cd openwrt
         source ${BUILD_PATH}/common.sh && Diy_menu
     
-    - name: 混合缓存密钥
-      id: gen_cache_mixkey
-      working-directory: /${{matrix.target}}
-      run: |
+    #- name: 混合缓存密钥
+      #id: gen_cache_mixkey
+      #working-directory: /${{matrix.target}}
+      #run: |
         #target_device_arch_1="x86_64"
         #target_device_arch_2="rockchip_armv8"
         #gcc_hash=$(gcc --version | sha256sum | awk '{print substr($1,1,8)}')

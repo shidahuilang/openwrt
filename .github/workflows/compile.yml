@@ -84,8 +84,8 @@ jobs:
       id: gen_cache_mixkey
       working-directory: /${{matrix.target}}
       run: |
-        target_device_arch_1="x86_64"
-        target_device_arch_2="rockchip_armv8"
+        #target_device_arch_1="x86_64"
+        #target_device_arch_2="rockchip_armv8"
         gcc_hash=$(gcc --version | sha256sum | awk '{print substr($1,1,8)}')
         ldd_hash=$(ldd --version | sha256sum | awk '{print substr($1,1,8)}')
         #mixkey1="${target_device_arch_1}-${gcc_hash}-${ldd_hash}"

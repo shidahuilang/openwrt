@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [nanopi_r2c,nanopi_r2s,nanopi_r4s,nanopi_r5s]
+        target: [r2c,r2s,r4s,r5s]
 
         # [Lede_source,Lienol_source,Mortal_source,Tianling_source,openwrt_amlogic]
 

@@ -47,6 +47,9 @@ sed -i "s/OpenWrt /大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" "${ZZZ_P
 sed -i '/CYXluq4wUazHjmCDBCqXF/d' "${ZZZ_PATH}"
 
 
+# 拉取旧版OpenClash固件
+# svn co https://github.com/shidahuilang/OpenClash package/luci-app-xiaolaoshu
+
 # 删除默认防火墙
 sed -i '/to-ports 53/d' "${ZZZ_PATH}"
 

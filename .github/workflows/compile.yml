@@ -148,16 +148,16 @@ jobs:
         name: ${{ env.SOURCE }}-${{ env.TARGET_PROFILE }}-firmware-${{ env.Firmware_Date }}
         path: ${{ env.FIRMWARE }}
         
-    - name: 部署固件到服务器
-      uses: easingthemes/ssh-deploy@main
-      with:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        ARGS: "-avzr --exclude="
-        SOURCE: firmware/
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-        REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
-        REMOTE_USER: root
-        TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/openwrt/firmware/${{matrix.target}}/"
+   # - name: 部署固件到服务器
+   #   uses: easingthemes/ssh-deploy@main
+   #   with:
+   #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+   #     ARGS: "-avzr --exclude="
+   #     SOURCE: firmware/
+   #     REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+   #     REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
+   #     REMOTE_USER: root
+   #     TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/openwrt/firmware/${{matrix.target}}/"
 
     - name: 上传固件到「WeTransfer」
       continue-on-error: true

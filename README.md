@@ -4,6 +4,9 @@
 - 默认IP地址：`192.168.2.1`
 - 账户：`root`   密码：`空`
  
+ ##### 固件更新下载:
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/shidahuilang/openwrt?style=for-the-badge&label=固件更新下载)](https://github.com/shidahuilang/openwrt/releases/latest)
+
  ## [`固件下载地址`](https://github.com/shidahuilang/openwrt/releases/tag/AutoUpdate)
  ## [`插件下载地址`](https://github.com/shidahuilang/ipk/releases)
 - ================================================================

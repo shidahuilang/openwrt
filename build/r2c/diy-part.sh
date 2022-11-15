@@ -64,7 +64,7 @@ sed -i '/to-ports 53/d' $ZZZ_PATH
 
 
 # x86机型,默认内核5.15，修改内核为5.18（源码时时变,自行根据target/linux/x86/Makefile文件修改）
-sed -i 's/PATCHVER:=5.15/PATCHVER:=5.4/g' target/linux/rockchip/Makefile
+sed -i 's/PATCHVER:=5.15/PATCHVER:=5.15/g' target/linux/rockchip/Makefile
 
 # 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
 export OpenClash_branch='master'

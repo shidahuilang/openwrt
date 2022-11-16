@@ -50,7 +50,9 @@ sed -i '/CYXluq4wUazHjmCDBCqXF/d' "${ZZZ_PATH}"
 # 拉取旧版OpenClash固件
 # svn co https://github.com/shidahuilang/OpenClash package/luci-app-xiaolaoshu
 
-# sed -ri '/check_signature/s@^[^#]@#&@' /etc/opkg.conf
+#sed -ri 's@^[^#]@#&@' /etc/opkg/distfeeds.conf
+#grep -E '/local_feed' /etc/opkg/customfeeds.conf || echo 'src/gz local file:///local_feed' >> /etc/opkg/customfeeds.conf
+#sed -ri '/check_signature/s@^[^#]@#&@' /etc/opkg.conf
 
 # 删除默认防火墙
 sed -i '/to-ports 53/d' "${ZZZ_PATH}"

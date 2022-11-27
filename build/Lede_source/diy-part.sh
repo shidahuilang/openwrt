@@ -49,7 +49,7 @@ sed -i '/CYXluq4wUazHjmCDBCqXF/d' "${ZZZ_PATH}"
 
 # 拉取旧版OpenClash固件
 # svn co https://github.com/shidahuilang/OpenClash package/luci-app-xiaolaoshu
-svn co https://github.com/makebl/luci-theme/trunk/luci-app-passwall package/luci-app-passwall
+
 
 #sed -ri 's@^[^#]@#&@' /etc/opkg/distfeeds.conf
 #grep -E '/local_feed' /etc/opkg/customfeeds.conf || echo 'src/gz local file:///local_feed' >> /etc/opkg/customfeeds.conf

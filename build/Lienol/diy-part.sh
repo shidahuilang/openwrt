@@ -28,9 +28,9 @@ export Kernel_Patchver="0"                  # 更换内核版本,前提是您编
 export Confidentiality_free="0"             # 设置首次登录后台密码为空（进入openwrt后自行修改密码）(1为开,0为关闭)
 export Remove_Firewall="0"                  # 删除DNS强制重定向53端口防火墙规则(1为开,0为关闭)
 export Cancel_running="1"                   # 取消路由器每天跑分任务
-export AdGuardHome_Core="0"                 # 编译固件增加AdGuardHome时,把核心下载好,需要注意的是一个核心20多MB的,小闪存机子搞不来(1为开,0为关闭)
+export AdGuardHome_Core="1"                 # 编译固件增加AdGuardHome时,把核心下载好,需要注意的是一个核心20多MB的,小闪存机子搞不来(1为开,0为关闭)
 
-export Personal_Signature="$(TZ=UTC-8 date "+%Y.%m.%d")"  # 个性签名,你想写啥就写啥，(填0为关闭)
+export Personal_Signature="大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d")"  # 个性签名,你想写啥就写啥，(填0为关闭)
 
 
 

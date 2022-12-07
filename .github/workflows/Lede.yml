@@ -24,7 +24,7 @@ on:
           - 'asus_rt-acrh17'
           - 'newifi-d1'
           - 'newifi-d2'
-          - 'p2w_r619ac-128m'
+          - 'k2p'
           - 'x86_32'
           - 'x86_64'
           - 'r2c'
@@ -37,6 +37,7 @@ on:
           - 'xiaomi_mi-router-3g'
           - 'xiaoyu_xy-c5'
           - 'ax3600'
+          - 'p2w_r619ac-128m'
       CPU_SELECTION:
         description: 'CPU优选,增加编译速度'
         required: false

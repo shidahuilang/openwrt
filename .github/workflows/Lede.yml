@@ -50,7 +50,7 @@ on:
         default: 'TG'
         type: choice
         options:
-          - '关闭'
+          - 'Telegram'
           - 'Telegram'
           - 'pushplus'
       SSH_ACTION:

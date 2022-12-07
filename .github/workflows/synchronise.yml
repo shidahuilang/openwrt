@@ -1,0 +1,103 @@
+#
+# 同步上游仓库或者清理发布都需要用REPO_TOKEN密匙
+#
+# 记住，同步上游是不会同步您任何自建文件夹的，所以同步后您要自己对比我现有的文件夹里面diy-part.sh和settings.ini文件有没有更新
+#
+# REPO_TOKEN密匙制作教程：https://git.io/jm.md
+#
+
+
+name: 同步上游仓库
+on:
+  workflow_dispatch:
+    inputs:
+      fork:
+        description: '同步上游仓库选择'
+        required: false
+        default: '单文件同步,带备份'
+        type: choice
+        options:
+          - '不同步上游仓库,单纯消灭仓库的.bak备份文件'
+          - '单文件同步,带备份'
+          - '单文件同步,不要备份'
+          - '拉取整个上游仓库覆盖您现在的仓库(无备份)'
+
+env:
+  REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+  TONGBU_CANGKU: 1
+  TZ: Asia/Shanghai
+
+jobs:
+  del_runs:
+    runs-on: ubuntu-22.04
+    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
+    
+    name: 同步上游仓库
+    
+    steps:
+    - name: 密匙检测（密匙为空则退出）
+      run: |
+        if [[ -z "${{ secrets.REPO_TOKEN }}" ]]; then
+          echo "您没有设置仓库密匙，请按教程设置好密匙再来"
+          echo "REPO_TOKEN密匙制作教程：https://git.io/jm.md"
+          exit 1
+        fi
+    - name: 准备结束
+      uses: actions/checkout@v3
+      
+    - name: 部署环境
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install -y git subversion git-core wget curl grep
+        sudo timedatectl set-timezone "$TZ"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        
+        if [[ -z "${{ github.event.inputs.fork }}" ]]; then
+          echo "again-fork=0" >> ${GITHUB_ENV}
+        elif [[ "${{ github.event.inputs.fork }}" == '不同步上游仓库,单纯消灭仓库的.bak备份文件' ]]; then
+          echo "again-fork=1" >> ${GITHUB_ENV}
+        elif [[ "${{ github.event.inputs.fork }}" == '单文件同步,带备份' ]]; then
+          echo "again-fork=2" >> ${GITHUB_ENV}
+        elif [[ "${{ github.event.inputs.fork }}" == '单文件同步,不要备份' ]]; then
+          echo "again-fork=3" >> ${GITHUB_ENV}
+        elif [[ "${{ github.event.inputs.fork }}" == '拉取整个上游仓库覆盖您现在的仓库(无备份)' ]]; then
+          echo "again-fork=4" >> ${GITHUB_ENV}
+        fi
+        
+    - name: 同步更新上游仓库
+      if: env.REPO_TOKEN
+      run: |
+        cd ${GITHUB_WORKSPACE}
+        git clone -b main https://github.com/281677160/autobuild.git shangyou
+        git clone -b main https://github.com/${{github.repository}}.git repogx
+        if [[ "${{ env.again-fork }}" == "1" ]]; then
+          echo "不同步,单纯消灭仓库的.bak备份文件"
+          export BENDI_SHANCHUBAK="1"
+          bash <(curl -fsSL https://raw.githubusercontent.com/shidahuilang/common/main/bendi/tongbu.sh)
+        elif [[ "${{ env.again-fork }}" == "2" ]]; then
+          echo "单文件同步,带备份"
+          export BENDI_SHANCHUBAK="2"
+          bash <(curl -fsSL https://raw.githubusercontent.com/shidahuilang/common/main/bendi/tongbu.sh)
+        elif [[ "${{ env.again-fork }}" == "3" ]]; then
+          echo "单文件同步,不要备份"
+          export BENDI_SHANCHUBAK="3"
+          bash <(curl -fsSL https://raw.githubusercontent.com/shidahuilang/common/main/bendi/tongbu.sh)
+        elif [[ "${{ env.again-fork }}" == "4" ]]; then
+          echo "拉取整个上游仓库覆盖您现在的仓库"
+          rm -rf repogx/*
+          cp -Rf shangyou/* repogx/
+          rm -rf repogx/.github/workflows/*
+          cp -Rf shangyou/.github/workflows/* repogx/.github/workflows/
+        else
+          echo "未知错误,关闭同步更新上游仓库"
+          exit 1
+        fi
+        sudo chmod -R +x ${GITHUB_WORKSPACE}/repogx
+        cd ${GITHUB_WORKSPACE}/repogx
+        git add .
+        git commit -m "Update $(date +%Y-%m%d-%H%M%S)"
+        git push --quiet "https://${{ secrets.REPO_TOKEN }}@github.com/${{github.repository}}" HEAD:main
+        echo "同步完成，请注意查看文件的变化和设置好!"

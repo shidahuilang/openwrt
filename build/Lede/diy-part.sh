@@ -7,7 +7,7 @@
 
 export IPv4_ipaddr="192.168.2.1"           # 修改openwrt后台地址(填0为关闭)
 export Netmask_netm="255.255.255.0"        # IPv4 子网掩码（默认：255.255.255.0）(填0为关闭)
-export Op_name="OpenWrt-123"               # 修改主机名称为OpenWrt-123(填0为关闭)
+export Op_name="OpenWrt"                   # 修改主机名称为OpenWrt-123(填0为关闭)
 
 export Router_gateway="192.168.2.1"         # 旁路由设置 IPv4 网关(填0为关闭)
 export Lan_DNS="114.114.114.114 223.5.5.5"  # 旁路由设置 DNS(多个DNS要用空格分开)(填0为关闭)

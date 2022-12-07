@@ -1,5 +1,5 @@
 ## `【大灰狼独家优化】（IPV6大全版  6.0 内核【带DOCKER】`
-源码有`coolsnowwolf` `Lienol`
+源码拉取`coolsnowwolf` `Lienol` `immortalwrt` `x-wrt` `openwrt`编译的话，自行选择
 - 大灰狼编译库`X86-R2C-R2S-R4S-R5S-N1-小米MI`等多系列全部适配OTA自动升级
 - 默认IP地址：`192.168.2.1`
 - 账户：`root`   密码：`空`

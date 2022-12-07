@@ -22,7 +22,8 @@ on:
         type: choice
         options:
           - 'asus_rt-acrh17'
-          - 'd-team_newifi-d2'
+          - 'newifi-d1'
+          - 'newifi-d2'
           - 'p2w_r619ac-128m'
           - 'x86_32'
           - 'x86_64'
@@ -34,6 +35,7 @@ on:
           - 'xiaomi_redmi-router-ac2100'
           - 'xiaomi_redmi-router-ax6s'
           - 'xiaoyu_xy-c5'
+          - 'ax3600'
       CPU_SELECTION:
         description: 'CPU优选,增加编译速度'
         required: false

@@ -71,7 +71,7 @@ jobs:
       if: env.REPO_TOKEN
       run: |
         cd ${GITHUB_WORKSPACE}
-        git clone -b main https://github.com/281677160/autobuild.git shangyou
+        git clone -b main https://github.com/shidahuilang/openwrt.git shangyou
         git clone -b main https://github.com/${{github.repository}}.git repogx
         if [[ "${{ env.again-fork }}" == "1" ]]; then
           echo "不同步,单纯消灭仓库的.bak备份文件"

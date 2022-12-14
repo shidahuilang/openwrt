@@ -62,7 +62,7 @@ jobs:
       run: |
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        export CPU_OPTIMIZATION="E5"
+        export CPU_OPTIMIZATION="8370"
         source build/${FOLDER_NAME}/common.sh && CPU_Priority
         
     - name: 部署编译环境

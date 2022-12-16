@@ -37,7 +37,7 @@ jobs:
     - name: 准备结束
       uses: actions/checkout@v3
 
-    - name: 读取脚本设置
+    - name: 读取脚本
       run: |
         cd ${GITHUB_WORKSPACE}
         git clone https://github.com/shidahuilang/common build/common
@@ -62,7 +62,7 @@ jobs:
         fi
         source build/${FOLDER_NAME}/common.sh && CPU_Priority
         
-    - name: 部署编译环境
+    - name: 部署环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -90,13 +90,13 @@ jobs:
         cd openwrt
         source ${BUILD_PATH}/common.sh && Diy_menu3
  
-    - name: 加载diy-part.sh文件
+    - name: 加载diy文件
       run: |
         cd openwrt
         source $BUILD_PATH/$DIY_PART_SH
         source ${BUILD_PATH}/common.sh && Diy_Publicarea
         
-    - name: 加载源、补丁和files文件夹
+    - name: 加载自定义
       run: |
         cd openwrt
         source ${BUILD_PATH}/common.sh && Diy_menu4
@@ -130,7 +130,7 @@ jobs:
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
     
-    - name: 开始编译固件
+    - name: 编译固件
       id: compile
       run: |
         cd openwrt
@@ -138,7 +138,7 @@ jobs:
         make -j$(nproc) || make -j1 V=s
         echo "date=$(date "+%Y%m%d%H%M%S")" >> ${GITHUB_ENV}
         
-    - name: 打包晶晨系列固件
+    - name: 打包晶晨
       continue-on-error: true
       if: steps.compile.outcome == 'success' && env.PACKAGING_FIRMWARE == 'true'
       uses: ophub/amlogic-s9xxx-openwrt@main
@@ -149,7 +149,7 @@ jobs:
         auto_kernel: ${{ env.auto_kernel }}
         openwrt_size: ${{ env.rootfs_size }}
 
-    - name: 整理固件文件夹(需配合diy-part.sh设定使用)
+    - name: 整理固件
       continue-on-error: true
       id: organizer
       run: |

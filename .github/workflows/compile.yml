@@ -1,15 +1,8 @@
-#
-#
-# 此文件为编译文件,一般情况下不使用这个来启动,运行build-openwrt.yml会自动触发编译
-#
-# 如果自动触发挂了的情况下，可以在这里选择好机型，选择 compile 启动编译
-#
-# REPO_TOKEN密匙制作教程：https://git.io/jm.md
-#
+# 编译主程序,请勿乱修改
 #
 
 
-name: 根源-compile
+name: 编译主程序
 on:
   workflow_dispatch:
   push:
@@ -25,10 +18,6 @@ env:
   RUN_NUMBER: ${{github.run_number}}
   RUN_WORKFLOW: ${{github.workflow}}
   REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-  SCKEY: ${{ secrets.SCKEY }}
-  PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
-  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
   TZ: Asia/Shanghai
 
 jobs:
@@ -44,8 +33,6 @@ jobs:
       matrix:
         target: [Lede]
 
-        # [Lede,Immortalwrt,Lienol,Xwrt,Official,Amlogic]
-
     steps:    
     - name: 准备结束
       uses: actions/checkout@v3
@@ -53,27 +40,32 @@ jobs:
     - name: 读取脚本设置
       run: |
         cd ${GITHUB_WORKSPACE}
-        git clone https://github.com/shidahuilang/common build/common
+        git clone https://github.com/makebl/common build/common
         mv -f build/common/*.sh build/${{matrix.target}}/
         sudo chmod -R +x build
-        source build/${{matrix.target}}/common.sh && Diy_menu1
-         
+        if [[ -n "${{ github.event.workflow }}" ]]; then
+          export Manually_Run="1"
+          source build/${{matrix.target}}/common.sh && Diy_menu1
+        else
+          source build/${{matrix.target}}/common.sh && Diy_menu1
+        fi
+
     - name: CPU检测
       run: |
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        export CPU_OPTIMIZATION="8370"
+        if [[ -n "${{ github.event.workflow }}" ]]; then
+          export CPU_SELECTIOY="$(source "${GITHUB_WORKSPACE}/build/${FOLDER_NAME}/settings.ini" && echo "${CPU_SELECTION}")"
+        else
+          export CPU_PASSWORD="1671168608"
+          export CPU_OPTIMIZATION="E5"
+        fi
         source build/${FOLDER_NAME}/common.sh && CPU_Priority
         
     - name: 部署编译环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        if [[ "${{ env.SOURCE_CODE }}" == "AMLOGIC" ]]; then
-          docker rmi `docker images -q`
-          sudo -E apt-get -qq remove -y --purge azure-cli ghc* zulu* llvm* firefox google* powershell openjdk* msodbcsql17 mongodb* moby* snapd* mysql*
-        fi
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /usr/lib/jvm /opt/ghc /swapfile
         source ${GITHUB_WORKSPACE}/build/${{matrix.target}}/common.sh && Diy_update
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /${{ env.DIY_WORK }}
@@ -91,7 +83,7 @@ jobs:
         cd ${GITHUB_WORKSPACE}
         cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt
         cd openwrt
-        source build/${{matrix.target}}/common.sh && Diy_menu2
+        source ${BUILD_PATH}/common.sh && Diy_menu2
  
     - name: 增加插件源
       run: |
@@ -102,7 +94,7 @@ jobs:
       run: |
         cd openwrt
         source $BUILD_PATH/$DIY_PART_SH
-        source build/${{matrix.target}}/common.sh && Diy_Publicarea
+        source ${BUILD_PATH}/common.sh && Diy_Publicarea
         
     - name: 加载源、补丁和files文件夹
       run: |
@@ -149,11 +141,15 @@ jobs:
     - name: 打包晶晨系列固件
       continue-on-error: true
       if: steps.compile.outcome == 'success' && env.PACKAGING_FIRMWARE == 'true'
-      run: |
-        cd ${GITHUB_WORKSPACE}
-        source ${BUILD_PATH}/common.sh && Package_amlogic
+      uses: ophub/amlogic-s9xxx-openwrt@main
+      with:
+        openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
+        openwrt_board: ${{ env.amlogic_model }}
+        openwrt_kernel: ${{ env.amlogic_kernel }}
+        auto_kernel: ${{ env.auto_kernel }}
+        openwrt_size: ${{ env.rootfs_size }}
 
-    - name: 整理固件文件夹
+    - name: 整理固件文件夹(需配合diy-part.sh设定使用)
       continue-on-error: true
       id: organizer
       run: |
@@ -209,7 +205,10 @@ jobs:
       run: |
         mkdir -p Github_Api
         cd Github_Api
-        wget -q --no-cookie --no-check-certificate https://api.github.com/repos/${{github.repository}}/releases/tags/${{ env.TARGET_BOARD }} -O zzz_api
+        wget -q --no-check-certificate https://api.github.com/repos/${{github.repository}}/releases/tags/${{ env.TARGET_BOARD }} -O zzz_api
+        if [[ $? -ne 0 ]]; then
+          curl -fsSL https://api.github.com/repos/${{github.repository}}/releases/tags/${TARGET_BOARD} -o zzz_api
+        fi
         
     - name: 发送[在线更新固件]至云端3
       continue-on-error: true

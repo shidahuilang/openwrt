@@ -10,7 +10,7 @@ on:
     inputs:
       REPO_BRANCH:
         description: '官方源码-请选择分支'
-        required: false
+        required: true
         default: 'openwrt-22.03'
         type: choice
         options:
@@ -19,15 +19,15 @@ on:
           - 'openwrt-19.07'
           - 'master'
       CONFIG_FILE:
-        description: '配置文件'
-        required: false
+        description: '请选择配置文件'
+        required: true
         default: 'x86_64'
         type: choice
         options:
           - 'x86_64'
       CPU_SELECTION:
         description: 'CPU优选,增加编译速度'
-        required: false
+        required: true
         default: '弃用E5系列'
         type: choice
         options:
@@ -37,7 +37,7 @@ on:
           - '选择8171M'
       INFORMATION_NOTICE:
         description: 'Telegram或pushplus信息通知'
-        required: false
+        required: true
         default: '关闭'
         type: choice
         options:
@@ -87,18 +87,22 @@ env:
   RUN_NUMBER: ${{github.run_number}}
   RUN_WORKFLOW: ${{github.workflow}}
   REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-  PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
-  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-  SOURCE_CODE: OFFICIAL
-  FOLDER_NAME: Official
   TZ: Asia/Shanghai
 
 jobs:
   build:
-    name: 启动"${{ github.event.inputs.REPO_BRANCH }}"触发编译
+    name: 启动"${{ matrix.target }}-${{ github.event.inputs.REPO_BRANCH }}"触发编译
     runs-on: ubuntu-20.04
     if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
+    
+    env:
+      FOLDER_NAME: ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [Official]
+        
+        # 请勿对 target: [Official] 做任何修改
         
     steps:
     - name: 密匙检测（密匙为空则退出）
@@ -119,6 +123,7 @@ jobs:
         git clone https://github.com/shidahuilang/common build/common
         mv -f build/common/*.sh build/${{ env.FOLDER_NAME }}/
         chmod -R +x build
+        export SOURCE_CODE="$(source "build/${{ matrix.target }}/settings.ini" && echo ${SOURCE_CODE})"
         export INPUTS_INFORMATION_NOTICE="${{ github.event.inputs.INFORMATION_NOTICE }}"
         export INPUTS_REPO_BRANCH="${{ github.event.inputs.REPO_BRANCH }}"
         export INPUTS_CONFIG_FILE="${{ github.event.inputs.CONFIG_FILE }}"
@@ -126,11 +131,10 @@ jobs:
         export INPUTS_UPLOAD_RELEASE="${{ github.event.inputs.UPLOAD_RELEASE }}"
         export INPUTS_CACHEWRTBUILD_SWITCH="${{ github.event.inputs.CACHEWRTBUILD_SWITCH }}"
         export INPUTS_UPDATE_FIRMWARE_ONLINE="${{ github.event.inputs.UPDATE_FIRMWARE_ONLINE }}"
+        export INPUTS_PACKAGING_FIRMWARE="${{ github.event.inputs.PACKAGING_FIRMWARE }}"
         export INPUTS_COLLECTED_PACKAGES="${{ github.event.inputs.COLLECTED_PACKAGES }}"
         export INPUTS_CPU_SELECTION="${{ github.event.inputs.CPU_SELECTION }}"
-        if [[ -n "${{ github.event.inputs.REPO_BRANCH }}" ]]; then
-          source build/${{ env.FOLDER_NAME }}/common.sh && settings_variable
-        fi
+        source build/${{ env.FOLDER_NAME }}/common.sh && settings_variable
         source build/${{ env.FOLDER_NAME }}/common.sh && Diy_menu1
         
     - name: 部署编译环境
@@ -145,7 +149,7 @@ jobs:
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
     
-    - name: 下载"${{ env.FOLDER_NAME }}-${{ github.event.inputs.REPO_BRANCH }}"源码
+    - name: 下载"${{ matrix.target }}-${{ github.event.inputs.REPO_BRANCH }}"源码
       working-directory: /${{ env.DIY_WORK }}
       run: |
         git clone -b "${REPO_BRANCH}" --single-branch "${REPO_URL}" openwrt
@@ -184,12 +188,12 @@ jobs:
     
     - name: SSH远程连接（制作.config配置文件）
       if: github.event.inputs.SSH_ACTION == 'true'
-      uses: danshui-git/debugger-action@main
+      uses: makebl/debugger-action@main
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-    - name: 生成"${{ env.FOLDER_NAME }}"配置文件
+    - name: 生成"${{ matrix.target }}"配置文件
       if: env.REPO_TOKEN
       id: compile
       run: |
@@ -216,10 +220,10 @@ jobs:
       if: env.REPO_TOKEN
       uses: Mattraks/delete-workflow-runs@v2
       with:
-          token: ${{ secrets.REPO_TOKEN }}
-          repository: ${{ github.repository }}
-          retain_days: ${{ env.RETAIN_DAYS }}
-          keep_minimum_runs: 1
+        token: ${{ secrets.REPO_TOKEN }}
+        repository: ${{ github.repository }}
+        retain_days: ${{ env.RETAIN_DAYS }}
+        keep_minimum_runs: 1
     
     - name: 删除releases
       continue-on-error: true
@@ -232,7 +236,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         
-    - name: 触发compile.yml启动"${{ env.FOLDER_NAME }}"编译
+    - name: 触发compile.yml启动"${{ matrix.target }}"编译
       id: gitpush
       if: steps.compile.outcome == 'success' && env.REPO_TOKEN
       run: |

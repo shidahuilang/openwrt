@@ -40,7 +40,7 @@ jobs:
     - name: 读取脚本设置
       run: |
         cd ${GITHUB_WORKSPACE}
-        git clone https://github.com/makebl/common build/common
+        git clone https://github.com/shidahuilang/common build/common
         mv -f build/common/*.sh build/${{matrix.target}}/
         sudo chmod -R +x build
         if [[ -n "${{ github.event.workflow }}" ]]; then

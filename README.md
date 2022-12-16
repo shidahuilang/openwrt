@@ -9,7 +9,7 @@
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/shidahuilang/ipk?style=for-the-badge&label=插件更新下载)](https://github.com/shidahuilang/ipk/releases)
 - ================================================================
-- 首先需要打开 Openwrt 主页,点击系统-TTYD 命令窗,或者使用putty和openwrt后台luci插件定时更新 
+- 首先需要打开 Openwrt 主页,点击系统-TTYD 命令窗,或者使用```putty```或者```openwrt```后台luci插件在线更新 
 - 输入`openwrt`即可进入固件升级菜单                            
 - 输入`tools`即可打开工具箱
 - 输入`qinglong`即可全自动安装青龙 

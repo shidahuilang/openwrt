@@ -54,7 +54,7 @@ on:
         default: '关闭'
         type: choice
         options:
-          - 'Telegram'
+          - '关闭'
           - 'Telegram'
           - 'pushplus'
       SSH_ACTION:

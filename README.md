@@ -26,9 +26,9 @@ cd openwrt && make menuconfig
 - 结束ctrl+d
 - REPO_TOKEN密匙制作教程：https://git.io/jm.md
 - 云编译需要 [在此](https://github.com/settings/tokens) 创建个token,勾选：repo, workflow，保存所得的key
-- 然后在此仓库Settings->Secrets中添加个名字为```REPO_TOKEN```的Secret,填入token获得的key
+- 然后在此仓库```Settings```->```Secrets```中添加个名字为```REPO_TOKEN```的Secret,填入token获得的key
 
-- TG通知Settings->Secrets中添加个名字为```TELEGRAM_BOT_TOKEN```和```TELEGRAM_CHAT_ID```
+- TG通知```Settings```->```Secrets```中添加个名字为```TELEGRAM_BOT_TOKEN```和```TELEGRAM_CHAT_ID```
 
 ## 自动更新固件
 ![img.png](img/img.png)

@@ -60,7 +60,7 @@ export Cancel_running="1"                    # 取消路由器每天跑分任务
 # 对应支持什么机型，请看说明
 # 可选内核 （5.4.xx） （5.10.xx） （5.15.xx） （6.0.xx）
 
-export amlogic_model="s905d_s905x_s912"
+export amlogic_model="s905d"
 export amlogic_kernel="5.10.01_5.15.01"
 export auto_kernel="true"
 export rootfs_size="960"

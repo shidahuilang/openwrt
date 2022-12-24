@@ -59,7 +59,7 @@ on:
       CACHEWRTBUILD_SWITCH:
         description: '缓存加速编译'
         required: false
-        default: 'true'
+        default: 'false'
         type: boolean
       PACKAGING_FIRMWARE:
         description: 'N1和晶晨系列固件自动打包成 .img 固件'

@@ -57,6 +57,7 @@ on:
           - 'Telegram'
           - 'Telegram'
           - 'pushplus'
+          - 'weixin'
       SSH_ACTION:
         description: 'SSH远程配置固件'
         required: false
@@ -104,6 +105,8 @@ env:
   PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+  WX_TOKEN: ${{ secrets.WX_TOKEN }}
+  CURL: ${{ secrets.CURL }}
   TZ: Asia/Shanghai
 
 jobs:

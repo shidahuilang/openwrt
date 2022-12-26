@@ -263,9 +263,9 @@ jobs:
         cd ${GITHUB_WORKSPACE}
         source ${BUILD_PATH}/common.sh && build_openwrt
         
-    - name: 电报机器人或pushplus/Wechat信息通知
+    - name: 电报机器人或pushplus信息通知
       continue-on-error: true
-      if: env.PUSH_PLUS_TOKEN && env.INFORMATION_NOTICE == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.INFORMATION_NOTICE == 'TG'
+      if: env.PUSH_PLUS_TOKEN && env.INFORMATION_NOTICE == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.INFORMATION_NOTICE == 'TG' || env.WX_TOKEN && env.INFORMATION_NOTICE == 'WX'
       run: |
         if [[ "${{ env.INFORMATION_NOTICE }}" == "TG" ]]; then
           if [[ "${{steps.gitpush.outcome}}" == 'success' ]] && [[ "${{steps.compile.outcome}}" == 'success' ]]; then
@@ -290,15 +290,4 @@ jobs:
             curl -k --data token="${{ secrets.WX_TOKEN }}" --data title="触发启动失败" --data "message=💥主人❌ ：上游扩展错误或者脚本错误,触发启动【${{ env.FOLDER_NAME }}】失败,请点击触发脚本步骤查看详情!(${{env.Tongzhi_Date}})" "http://${{ secrets.CURL }}/push?token=${{ secrets.WX_TOKEN }}&"
             exit 1
           fi
-        fi 
-           if [[ "${{ env.INFORMATION_NOTICE }}" == "WX" ]]; then
-          if [[ "${{steps.compile.outcome}}" == 'failure' ]]; then
-            curl -k --data token="${{ secrets.WX_TOKEN }}" --data title="[${{ env.SOURCE }}-${{ env.TARGET_PROFILE }}]编译失败" --data "message=我亲爱的❌主人❌：您使用【${{matrix.target}}】文件夹编译的[${{ env.SOURCE }}-${{ env.TARGET_PROFILE }}]固件(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)编译失败😴！(${{env.Tongzhi_Date}})" "http://${{ secrets.CURL }}/push?token=${{ secrets.WX_TOKEN }}&"
-          elif [[ "${{steps.compile.outcome}}" == 'success' ]] && [[ "${{steps.regular.outcome}}" == 'success' ]]; then
-            curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="[${{ env.SOURCE }}-${{ env.TARGET_PROFILE }}]编译成功,发布成功" --data "message=我亲爱的✨主人✈️：您使用【${{matrix.target}}】文件夹编译的[${{ env.SOURCE }}-${{ env.TARGET_PROFILE }}]固件(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)顺利编译成功,发布云端在线更新使用的固件成功！🎈(${{env.Tongzhi_Date}})" "http://${{ secrets.CURL }}/push?token=${{ secrets.WX_TOKEN }}&"
-          elif [[ "${{steps.compile.outcome}}" == 'success' ]] && [[ "${{steps.regular.outcome}}" == 'skipped' ]]; then
-            curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="[${{ env.SOURCE }}-${{ env.TARGET_PROFILE }}]编译成功" --data "message=我亲爱的✨主人✨：您使用【${{matrix.target}}】文件夹编译的[${{ env.SOURCE }}-${{ env.TARGET_PROFILE }}]固件💐(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)顺利编译完成了✌️💯！(${{env.Tongzhi_Date}})" "http://${{ secrets.CURL }}/push?token=${{ secrets.WX_TOKEN }}&"
-          elif [[ "${{steps.compile.outcome}}" == 'success' ]] && [[ "${{steps.regular.outcome}}" == 'failure' ]]; then 
-            curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="[${{ env.SOURCE }}-${{ env.TARGET_PROFILE }}]编译成功,发布失败" --data "message=我亲爱的✨主人❌：您使用【${{matrix.target}}】文件夹编译的[${{ env.SOURCE }}-${{ env.TARGET_PROFILE }}]固件(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)顺利编译成功✌️,💥但是发布云端在线更新使用的固件失败了💥！(${{env.Tongzhi_Date}})" "http://${{ secrets.CURL }}/push?token=${{ secrets.WX_TOKEN }}&"
-          fi
-        fi  
+        fi

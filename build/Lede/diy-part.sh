@@ -14,7 +14,7 @@ export Mandatory_theme="argon"              # 将bootstrap替换您需要的主�
 export Default_theme="argon"                # 多主题时,选择某主题为默认第一主题 (填写主题名称,填0为不作修改)
 
 # 旁路由选项
-export Gateway_Settings="192.168.2.4"       # 旁路由设置 IPv4 网关(填入您的网关IP为启用)(填0为不作修改)
+export Gateway_Settings="192.168.2.1"       # 旁路由设置 IPv4 网关(填入您的网关IP为启用)(填0为不作修改)
 export DNS_Settings="114.114.114.114"       # 旁路由设置 DNS(填入DNS，多个DNS要用空格分开)(填0为不作修改)
 export Broadcast_Ipv4="0"                   # 设置 IPv4 广播(填入您的IP为启用)(填0为不作修改)
 export Disable_DHCP="0"                     # 旁路由关闭DHCP功能(1为启用命令,填0为不作修改)
@@ -27,7 +27,7 @@ export Disable_IPv6_option="0"               # 关闭固件里面所有IPv6选�
 
 # OpenClash
 export OpenClash_branch="master"             # OpenClash代码选择分支（master 或 dev）(填0为不需要此插件)
-export OpenClash_Core="0"                    # 编译固件增加OpenClash时,把核心下载好,核心为3MB左右大小(1为启用命令,填0为不需要核心)
+export OpenClash_Core="1"                    # 编译固件增加OpenClash时,把核心下载好,核心为3MB左右大小(1为启用命令,填0为不需要核心)
 
 # 个性签名,默认增加年月日[$(TZ=UTC-8 date "+%Y.%m.%d")]
 export Customized_Information="大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d")"  # 个性签名,你想写啥就写啥，(填0为不作修改)

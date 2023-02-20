@@ -26,6 +26,7 @@ CONFIG_PACKAGE_TAR_XZ=y
 CONFIG_PACKAGE_TAR_ZSTD=y
 CONFIG_PACKAGE_UnblockNeteaseMusic=y
 CONFIG_PACKAGE_aliyundrive-fuse=y
+CONFIG_PACKAGE_aliyundrive-webdav=y
 CONFIG_PACKAGE_appfilter=y
 CONFIG_PACKAGE_aria2=y
 CONFIG_PACKAGE_ariang=y
@@ -143,6 +144,7 @@ CONFIG_PACKAGE_luci-app-wolplus=y
 # CONFIG_PACKAGE_luci-app-zerotier is not set
 CONFIG_PACKAGE_luci-i18n-adguardhome-zh-cn=y
 CONFIG_PACKAGE_luci-i18n-aliyundrive-fuse-zh-cn=y
+CONFIG_PACKAGE_luci-i18n-aliyundrive-webdav-zh-cn=y
 CONFIG_PACKAGE_luci-i18n-argon-config-zh-cn=y
 CONFIG_PACKAGE_luci-i18n-bypass-zh-cn=y
 CONFIG_PACKAGE_luci-i18n-dockerman-zh-cn=y

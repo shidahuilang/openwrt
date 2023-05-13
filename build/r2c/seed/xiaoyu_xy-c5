@@ -1,6 +1,0 @@
-CONFIG_TARGET_ramips=y
-CONFIG_TARGET_ramips_mt7621=y
-CONFIG_TARGET_ramips_mt7621_DEVICE_xiaoyu_xy-c5=y
-
-# CONFIG_SIGNATURE_CHECK is not set
-# CONFIG_SIGNED_PACKAGES is not set

@@ -1,5 +1,6 @@
-替换文件用的文件夹，按照源码路径替换
+替换编译源码文件用的文件夹，按照源码路径替换
 替换文件有两个方法
+
 1、在这里按 Add file 然后选 Create new file 然后要替换文件的路径跟名字，下面大方框粘贴内容，然后最下面绿色按钮保存
 比如替换banner，在源码的路径是‘package/base-files/files/etc/banner’，按 Add file 然后选 Create new file，粘贴这个路径，下面大方框粘贴内容，然后最下面绿色按钮保存完成
 

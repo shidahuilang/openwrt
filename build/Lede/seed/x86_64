@@ -134,4 +134,3 @@ CONFIG_PACKAGE_watchcat=y
 # CONFIG_PACKAGE_wireguard-tools is not set
 CONFIG_TARGET_ROOTFS_PARTSIZE=900
 CONFIG_PACKAGE_UnblockNeteaseMusic-Go=y
-CONFIG_PACKAGE_luci-i18n-unblockmusic-zh-cn=y

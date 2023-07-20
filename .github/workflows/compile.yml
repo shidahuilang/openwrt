@@ -117,7 +117,7 @@ jobs:
       uses: stupidloud/cachewrtbuild@main
       with:
         ccache: 'true'
-        mixkey: "${{ env.TARGET_PROFILE }}"
+        mixkey: "${{ env.TARGET_BOARD }}"
         prefix: ${{ github.workspace }}/openwrt
         
     - name: 下载软件包

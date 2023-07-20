@@ -46,6 +46,7 @@ CONFIG_PACKAGE_kmod-ipt-offload=y
 CONFIG_PACKAGE_kmod-iptunnel=y
 CONFIG_PACKAGE_kmod-md-mod=y
 CONFIG_PACKAGE_kmod-md-raid0=y
+# CONFIG_PACKAGE_luci-app-arpbind is not set
 CONFIG_PACKAGE_kmod-md-raid1=y
 CONFIG_PACKAGE_kmod-md-raid10=y
 CONFIG_PACKAGE_kmod-nf-flow=y

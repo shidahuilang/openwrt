@@ -41,6 +41,7 @@ on:
           - 'xiaomi_mi-router-3g'
           - 'r68s'
           - 'r6s'
+          - 'n1'
       CPU_SELECTION:
         description: 'CPU优选,增加编译速度'
         required: true

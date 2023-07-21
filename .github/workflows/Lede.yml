@@ -38,7 +38,9 @@ on:
           - 'xiaomi_redmi-router-ax6s'
           - 'xiaoyu_xy-c5'
           - 'ax3600'
-          - 'p2w_r619ac-128m'
+          - 'xiaomi_mi-router-3g'
+          - 'r68s'
+          - 'r6s'
       CPU_SELECTION:
         description: 'CPU优选,增加编译速度'
         required: true

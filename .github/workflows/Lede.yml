@@ -26,7 +26,7 @@ on:
           - 'newifi-d1'
           - 'newifi-d2'
           - 'p2w_r619ac-128m'
-          - 'k2p'
+          - 'phicomm_k2p'
           - 'x86_32'
           - 'x86_64'
           - 'r2c'

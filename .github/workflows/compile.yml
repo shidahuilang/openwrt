@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/Lede/relevance/start'
+      - 'build/rockchip_armv8/relevance/start'
 
 env:
   GITHUB_LINK: https://github.com/${{github.repository}}
@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [Lede]
+        target: [rockchip_armv8]
 
     steps:    
     - name: 准备结束

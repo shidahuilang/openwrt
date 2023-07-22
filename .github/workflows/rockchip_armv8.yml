@@ -18,27 +18,13 @@ on:
       CONFIG_FILE:
         description: '请选择配置文件'
         required: true
-        default: 'x86_64'
+        default: 'r2s,r2c,r4s,r5s'
         type: choice
         options:
-          - 'aarch64'
-          - 'asus_rt-acrh17'
-          - 'newifi-d1'
-          - 'newifi-d2'
-          - 'p2w_r619ac-128m'
-          - 'k2p'
-          - 'x86_32'
-          - 'x86_64'
           - 'r2c'
           - 'r2s'
           - 'r4s'
           - 'r5s'
-          - 'xiaomi_mi-router-4a-gigabit'
-          - 'xiaomi_redmi-router-ac2100'
-          - 'xiaomi_redmi-router-ax6s'
-          - 'xiaoyu_xy-c5'
-          - 'ax3600'
-          - 'xiaomi_mi-router-3g'
           - 'r68s'
           - 'r6s'
           - 'n1'

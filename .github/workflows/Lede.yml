@@ -1,4 +1,4 @@
-#
+
 # REPO_TOKEN密匙制作教程：https://git.io/jm.md
 #
 #
@@ -23,32 +23,22 @@ on:
         options:
           - 'aarch64'
           - 'asus_rt-acrh17'
-          - 'newifi-d1'
-          - 'newifi-d2'
+          - 'd-team_newifi-d2'
           - 'p2w_r619ac-128m'
           - 'phicomm_k2p'
           - 'x86_32'
           - 'x86_64'
-          - 'r2c'
-          - 'r2s'
-          - 'r4s'
-          - 'r5s'
           - 'xiaomi_mi-router-4a-gigabit'
           - 'xiaomi_redmi-router-ac2100'
           - 'xiaomi_redmi-router-ax6s'
           - 'xiaoyu_xy-c5'
-          - 'ax3600'
-          - 'xiaomi_mi-router-3g'
-          - 'r68s'
-          - 'r6s'
-          - 'n1'
       CPU_SELECTION:
         description: 'CPU优选,增加编译速度'
         required: true
         default: '默认'
         type: choice
         options:
-          - '8370C'
+          - '默认'
           - '8370C'
           - '8272CL'
           - '8171M'
@@ -58,10 +48,9 @@ on:
         default: '关闭'
         type: choice
         options:
-          - 'Telegram'
+          - '关闭'
           - 'Telegram'
           - 'Pushplus'
-          - 'Wechat'
       SSH_ACTION:
         description: 'SSH远程配置固件'
         required: false
@@ -108,8 +97,6 @@ env:
   PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-  WX_TOKEN: ${{ secrets.WX_TOKEN }}
-  CURL: ${{ secrets.CURL }}
   TZ: Asia/Shanghai
 
 jobs:
@@ -266,13 +253,5 @@ jobs:
         if [[ "${{ env.INFORMATION_NOTICE }}" == "PUSH" ]]; then
           if [[ "${{steps.gitpush.outcome}}" == 'success' ]]; then
             curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="开始编译【${{matrix.target}}】" --data "content=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${REPO_BRANCH}分支的${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)！($(date +%Y年%m月%d号%H时%M分))💐" "http://www.pushplus.plus/send"
-          fi
-        fi
-        if [[ "${{ env.INFORMATION_NOTICE }}" == "WX" ]]; then
-          if [[ "${{steps.gitpush.outcome}}" == 'success' ]] && [[ "${{steps.compile.outcome}}" == 'success' ]]; then
-            curl -k --data token="${{ secrets.WX_TOKEN }}" --data title="开始编译【${{ env.FOLDER_NAME }}】" --data "message=🎉 主人💕：您的编译脚本成功触发【${{ env.FOLDER_NAME }}】文件夹编译【${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.Tongzhi_Date}})" "http://${{ secrets.CURL }}/push?token=${{ secrets.WX_TOKEN }}&"
-          else
-            curl -k --data token="${{ secrets.WX_TOKEN }}" --data title="触发启动失败" --data "message=💥主人❌ ：上游扩展错误或者脚本错误,触发启动【${{ env.FOLDER_NAME }}】失败,请点击触发脚本步骤查看详情!(${{env.Tongzhi_Date}})" "http://${{ secrets.CURL }}/push?token=${{ secrets.WX_TOKEN }}&"
-            exit 1
           fi
         fi

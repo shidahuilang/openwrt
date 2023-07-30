@@ -60,7 +60,7 @@
 			ethinfo    = eth_info,
 			userinfo    = user_info,
 			uptime     = sysinfo.uptime or 0,
-			localtime  = os.date("%Y-%m-%d") .. " " .. translate(os.date("%A")) .. " " .. os.date("%X"),
+			localtime  = os.date("%Y-%m-%d") .. " " .. os.date("%X") .. " " .. translate(os.date("%A")),
 			loadavg    = sysinfo.load or { 0, 0, 0 },
 			memory     = meminfo,
 			memcached  = mem_cached,
@@ -741,7 +741,7 @@
 		<tr><td width="33%"><%:CPU Info%></td><td id="cpuinfo">-</td></tr>
 		<tr><td width="33%"><%:Firmware Version%></td><td>
 			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
-			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
+			<%=pcdata(ver.luciname)%> - <%=pcdata(ver.luciversion)%>
 		</td></tr>
 		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>

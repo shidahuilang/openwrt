@@ -37,6 +37,7 @@ cd openwrt && make menuconfig
 ![img2.png](img/img2.png)
 ![img3.png](img/img3.png)
 
+[![Stargazers over time](https://starchart.cc/shidahuilang/openwrt.svg)](https://starchart.cc/shidahuilang/openwrt)
  ### 鸣谢！
  感谢以下各位大佬（排名无分先后）<br />
 [`coolsnowwolf`]

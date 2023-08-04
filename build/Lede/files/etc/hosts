@@ -1,4 +1,5 @@
 127.0.0.1 localhost
+##屏蔽finalshell更新
 127.0.0.1 www.youtusoft.com
 127.0.0.1 youtusoft.com
 127.0.0.1 hostbuf.com

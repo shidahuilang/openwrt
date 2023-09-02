@@ -39,8 +39,8 @@ jobs:
         target: [Lede]
 
     steps:    
-    - name: Free Disk Space (Ubuntu)
-    uses: jlumbroso/free-disk-space@main
+    - name: 清理空间
+      uses: jlumbroso/free-disk-space@main
       with:
         # this might remove tools that are actually needed,
         # if set to "true" but frees about 6 GB

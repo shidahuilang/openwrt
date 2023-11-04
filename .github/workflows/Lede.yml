@@ -48,7 +48,8 @@ on:
         default: '默认'
         type: choice
         options:
-          - '8370C'
+          - '7763'
+          - '7763'
           - '8370C'
           - '8272CL'
           - '8171M'

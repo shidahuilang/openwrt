@@ -4,7 +4,7 @@
 - 默认IP地址：`192.168.2.1`
 - 账户：`root`   密码：`空`
  
-点击下表中 [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?style=flat&logo=hack-the-box)](https://github.com/shidahuilang/openwrt/releases) 即可跳转到该设备固件下载页面
+#### 🚩 点击下表中 [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?style=flat&logo=hack-the-box)](https://github.com/shidahuilang/openwrt/releases) 即可跳转到该设备固件下载页面
 | 平台+设备名称 | 固件编译状态 | 配置文件 | 固件下载 |
 | :-------------: | :-------------: | :-------------: | :-------------: |
 | [![](https://img.shields.io/badge/openwrt-X86_64-32C955.svg?logo=openwrt)](https://github.com/shidahuilang/openwrt/blob/main/.github/workflows/Lede.yml) | [![](https://github.com/shidahuilang/openwrt/actions/workflows/Lede.yml/badge.svg)](https://github.com/shidahuilang/openwrt/actions/workflows/Lede.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/shidahuilang/openwrt/blob/main/build/Lede/seed/x86_64) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/shidahuilang/openwrt/releases/tag/Update-x86) |

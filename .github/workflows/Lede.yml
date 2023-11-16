@@ -3,7 +3,7 @@
 #
 #
 
-name: Lede-大雕
+name: Lede
 on:
   workflow_dispatch:
     inputs:

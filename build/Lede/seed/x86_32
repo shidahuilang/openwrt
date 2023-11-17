@@ -1,6 +1,6 @@
 CONFIG_TARGET_x86=y
-CONFIG_TARGET_x86_generic=y
-CONFIG_TARGET_x86_generic_DEVICE_generic=y
+CONFIG_TARGET_x86_core2=y
+CONFIG_TARGET_x86_core2_Generic=y
 CONFIG_PACKAGE_luci-app-openclash=y
 CONFIG_PACKAGE_luci-app-bypass=y
 CONFIG_PACKAGE_luci-app-passwall=y

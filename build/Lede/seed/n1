@@ -306,6 +306,7 @@ CONFIG_PACKAGE_python3-urllib=y
 CONFIG_PACKAGE_python3-uuid=y
 CONFIG_PACKAGE_python3-xml=y
 CONFIG_PACKAGE_qBittorrent-static=y
+CONFIG_PACKAGE_qbittorrent=y
 CONFIG_PACKAGE_qt5-core=y
 CONFIG_PACKAGE_qt5-network=y
 CONFIG_PACKAGE_qt5-sql=y

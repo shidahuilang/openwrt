@@ -88,10 +88,10 @@ jobs:
         sudo mkdir -p /${{ env.DIY_WORK }}
         sudo chown ${USER}:${GROUPS} /${{ env.DIY_WORK }}
 
-    - name: 升级rustc到1.70.0
-      run: |
-                curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.70.0
-                source $HOME/.cargo/env
+    #- name: 升级rustc到1.70.0
+      #run: |
+                #curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.70.0
+                #source $HOME/.cargo/env
                 
     - name: 下载"${{matrix.target}}"源码
       working-directory: /${{ env.DIY_WORK }}

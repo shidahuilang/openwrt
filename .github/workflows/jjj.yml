@@ -19,7 +19,7 @@ jobs:
         fi
     
     - name: 准备结束
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       
     - name: 清理Actions空间
       continue-on-error: true

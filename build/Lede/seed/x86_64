@@ -152,10 +152,6 @@ CONFIG_PACKAGE_smartmontools=y
 CONFIG_PACKAGE_snmpd=y
 CONFIG_PACKAGE_tar=y
 CONFIG_PACKAGE_taskd=y
-# CONFIG_PACKAGE_n2n-supernode is not set
-# CONFIG_PACKAGE_n2n-edge is not set
-# CONFIG_PACKAGE_phicomm-k3screenctrl is not set
-# CONFIG_PACKAGE_libquickjs is not set
 CONFIG_PACKAGE_trojan-plus=y
 CONFIG_PACKAGE_unzip=y
 CONFIG_PACKAGE_v2dat=y

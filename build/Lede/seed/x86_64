@@ -19,7 +19,6 @@ CONFIG_PACKAGE_TAR_BZIP2=y
 CONFIG_PACKAGE_TAR_GZIP=y
 CONFIG_PACKAGE_TAR_XZ=y
 CONFIG_PACKAGE_TAR_ZSTD=y
-CONFIG_PACKAGE_adguardhome=y
 CONFIG_PACKAGE_bash=y
 CONFIG_PACKAGE_blkid=y
 CONFIG_PACKAGE_boost=y
@@ -85,7 +84,7 @@ CONFIG_PACKAGE_libruby=y
 CONFIG_PACKAGE_libstdcpp=y
 CONFIG_PACKAGE_libyaml=y
 CONFIG_PACKAGE_libzstd=y
-CONFIG_PACKAGE_luci-app-adguardhome=y
+
 CONFIG_PACKAGE_luci-app-advanced=y
 CONFIG_PACKAGE_luci-app-argon-config=y
 CONFIG_PACKAGE_luci-app-cifs-mount=y

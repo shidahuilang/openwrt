@@ -16,10 +16,10 @@ on:
       RELEASE_TAG:
         description: '选择Release tag名称'
         required: true
-        default: 'AutoUpdate-x86'
+        default: 'Update-x86'
         type: choice
         options:
-          - 'AutoUpdate-x86'
+          - 'Update-x86'
           - 'AutoUpdate'
       GITHUB_API:
         description: '选择Release api文件'

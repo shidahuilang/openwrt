@@ -1,0 +1,74 @@
+#=================================================
+# https://github.com/roacn/openwrt
+# Description: Refresh github release api files
+# Lisence: GNU General Public License v3.0
+# Author: Ss.
+#=================================================
+
+name: 刷新ReleaseAPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      REFRESH_API:
+        description: '当release发布固件有手动增删时，用此手动刷新Release api文件'
+        default: 'true'
+      RELEASE_TAG:
+        description: '选择Release tag名称'
+        required: true
+        default: 'AutoUpdate-x86'
+        type: choice
+        options:
+          - 'AutoUpdate-x86'
+          - 'AutoUpdate-rockchip'
+      GITHUB_API:
+        description: '选择Release api文件'
+        required: true
+        default: 'zzz_api'
+        type: choice
+        options:
+          - 'zzz_api'
+          - 'Github_Tags'
+
+env:
+  GITHUB_REPOSITORY_URL: https://github.com/${{ github.repository }}
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_ACTOR: ${{ github.actor }}
+  GITHUB_WORKFLOW: ${{ github.workflow }}
+  
+jobs:
+  Job:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Download Github Release API
+      id: download
+      run: |
+        mkdir -p Github_Api
+        cd Github_Api
+        curl -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.event.inputs.RELEASE_TAG }} -o ${{ github.event.inputs.GITHUB_API }}
+        if [[ $? -ne 0 ]]; then
+            wget -q --no-cookie --no-check-certificate https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.event.inputs.RELEASE_TAG }} -O ${{ github.event.inputs.GITHUB_API }}
+        fi
+                
+    - name: Upload API to Github Release
+      uses: svenstaro/upload-release-action@master
+      if: steps.download.outcome == 'success'
+      with:
+        repo_token: ${{ secrets.REPO_TOKEN }}
+        file: "Github_Api/*"
+        file_glob: true
+        tag: ${{ github.event.inputs.RELEASE_TAG }}
+        overwrite: true
+        
+    - name: Clean Actions
+      uses: Mattraks/delete-workflow-runs@main
+      with:
+          token: ${{ secrets.REPO_TOKEN }}
+          repository: ${{ github.repository }}
+          keep_minimum_runs: 7
+          retain_days: 7

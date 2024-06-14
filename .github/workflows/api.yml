@@ -20,7 +20,7 @@ on:
         type: choice
         options:
           - 'AutoUpdate-x86'
-          - 'AutoUpdate-rockchip'
+          - 'AutoUpdate'
       GITHUB_API:
         description: '选择Release api文件'
         required: true

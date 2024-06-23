@@ -67,17 +67,17 @@ jobs:
     - name: 清理空间
       uses: jlumbroso/free-disk-space@main
       with:
-        # this might remove tools that are actually needed,
-        # if set to "true" but frees about 6 GB
+        # 这可能会移除实际需要的工具
+        # 如果设置为“true”，但释放约6 GB
         tool-cache: true
         
-        # all of these default to true, but feel free to set to
-        # "false" if necessary for your workflow
+        # 所有这些都默认为true
+        # "false" 可以随时关闭
         android: true
         dotnet: true
         haskell: true
         large-packages: true
-        swap-storage: true       
+        swap-storage: true     
         
     - name: 部署编译环境
       env:

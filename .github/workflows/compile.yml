@@ -191,9 +191,15 @@ jobs:
         tag: a${{ env.date }}
         token: ${{ secrets.REPO_TOKEN }}
         allowUpdates: true
-        body: ${{ env.Tongzhi_Date }}
         artifacts: "${{ env.FIRMWARE_PATH }}/*"
-        
+        body: |
+          🎁 编译仓库：${{ env.WAREHOUSE_MAN }}  
+          🌴 源码分支：${{ env.REPO_BRANCH }}
+          🔥 编译版本：${{ env.Openwrt_Version }}
+          🛸 LUCI版本：${{ env.LUCI_EDITION }}
+          ✨ 内核版本：${{ env.LINUX_KERNEL }}
+          ⏰ 编译时间：${{ env.Compte_Date }}
+          
     - name: 发送[在线更新固件]至云端1
       id: autoup
       if: steps.compile.outcome == 'success' && env.UPDATE_FIRMWARE_ONLINE == 'true' && env.REPO_TOKEN

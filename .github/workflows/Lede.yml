@@ -32,6 +32,7 @@ on:
           - 'r2c'
           - 'r2s'
           - 'r4s'
+          - 'r4se'
           - 'r5s'
           - 'xiaomi_mi-router-4a-gigabit'
           - 'xiaomi_redmi-router-ac2100'

@@ -1,12 +1,11 @@
 diff --git a/package/lean/autocore/files/x86/index.htm b/package/lean/autocore/files/x86/index.htm
-index 0f61c93..6595a20 100644
+index 0f61c93..f4c0791 100644
 --- a/package/lean/autocore/files/x86/index.htm
 +++ b/package/lean/autocore/files/x86/index.htm
-@@ -751,6 +751,14 @@
+@@ -751,6 +751,22 @@
  	</table>
  </fieldset>
  
-+
 +<fieldset class="cbi-section">
 +	<div style="display: flex; justify-content: flex-start; gap: 10px;">
 +		<input type="button" class="cbi-button cbi-button-apply" value="<%:更新教程%>" onclick="window.open('https://github.com/shidahuilang/openwrt')" />
@@ -14,38 +13,15 @@ index 0f61c93..6595a20 100644
 +	</div>
 +</fieldset>
 +
++<fieldset class="cbi-section">
++<iframe allowtransparency="true" frameborder="0" width="1100" height="86" scrolling="no" src="//tianqi.2345.com/plugin/widget/index.htm?s=2&z=1&t=0&v=0&d=5&bd=0&k=000000&f=&ltf=009944&htf=cc0000&q=1&e=1&a=1&c=57083&w=575&h=96&align=right"></iframe>
++
++	<legend><%:Interfaces%></legend>
++
++	<table width="100%" cellspacing="10" id="ethinfo">
++	</table>
++</fieldset>
++
  <fieldset class="cbi-section">
  	<legend><%:Memory%></legend>
  
-@@ -839,15 +847,15 @@
- 
- <% if has_dsl then %>
- <fieldset class="cbi-section">
--       <legend><%:DSL%></legend>
--       <table width="100%" cellspacing="10">
--               <tr><td width="33%" style="vertical-align:top"><%:DSL Status%></td><td>
--                       <table><tr>
--                               <td id="dsl_i" style="width:16px; text-align:center; padding:3px"><img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small></td>
--                               <td id="dsl_s" style="vertical-align:middle; padding: 3px"><em><%:Collecting data...%></em></td>
--                       </tr></table>
--               </td></tr>
--       </table>
-+	<legend><%:DSL%></legend>
-+	<table width="100%" cellspacing="10">
-+		<tr><td width="33%" style="vertical-align:top"><%:DSL Status%></td><td>
-+			<table><tr>
-+				<td id="dsl_i" style="width:16px; text-align:center; padding:3px"><img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small></td>
-+				<td id="dsl_s" style="vertical-align:middle; padding: 3px"><em><%:Collecting data...%></em></td>
-+			</tr></table>
-+		</td></tr>
-+	</table>
- </fieldset>
- <% end %>
- 
-@@ -861,4 +869,4 @@
- </fieldset>
- <% end %>
- 
--<%+footer%>
-\ No newline at end of file
-+<%+footer%>

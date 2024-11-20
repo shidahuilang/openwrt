@@ -47,7 +47,7 @@ export Replace_Kernel="6.6"                    # 更换内核版本,在对应源
 export Password_free_login="1"               # 设置首次登录后台密码为空（进入openwrt后自行修改密码）(1为启用命令,填0为不作修改)
 
 # 增加AdGuardHome插件和核心
-export AdGuardHome_Core="1"                  # 编译固件时自动增加AdGuardHome插件和AdGuardHome插件核心,需要注意的是一个核心20多MB的,小闪存机子搞不来(1为启用命令,填0为不作修改)
+export AdGuardHome_Core="0"                  # 编译固件时自动增加AdGuardHome插件和AdGuardHome插件核心,需要注意的是一个核心20多MB的,小闪存机子搞不来(1为启用命令,填0为不作修改)
 
 # 增加cloudflared插件和核心
 export cloudflared_Core="0"                  # 编译固件时自动增加luci-app-cloudflared插件和cloudflared插件核心,(1为启用命令,填0为不作修改)  

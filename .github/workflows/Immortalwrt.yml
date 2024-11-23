@@ -124,7 +124,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: 设置 GENE_PATH
-      run: echo "GENE_PATH1=${GITHUB_WORKSPACE1}/openwrt/package/base-files/bin/config_generate" >> ${GITHUB_ENV}
+      run: echo "GENE_PATH1=${GITHUB_WORKSPACE1}/openwrt/package/base-files/files/bin/config_generate" >> ${GITHUB_ENV}
 
     - name: 检测文件和对比上游版本
       run: |

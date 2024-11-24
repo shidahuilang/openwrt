@@ -166,7 +166,12 @@ jobs:
         cd ${GITHUB_WORKSPACE}
         cd openwrt
         source ${BUILD_PATH}/common.sh && Diy_menu2
- 
+
+    - name: 设置 GENE_PATH 环境变量（仅在 openwrt-23.05 分支）
+      if: github.ref == 'refs/heads/openwrt-23.05'
+      run: |
+       echo "GENE_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/bin/config_generate" >> ${GITHUB_ENV}
+
     - name: 更新插件源
       if: env.REPO_TOKEN
       run: |

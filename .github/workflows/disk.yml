@@ -5,7 +5,7 @@ on:
 
 jobs:
   cleanup:
-    runs-on: ubuntu-latest # 使用默认的 Ubuntu runner
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Check initial disk usage

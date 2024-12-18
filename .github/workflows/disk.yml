@@ -1,0 +1,26 @@
+name: 清理空间
+
+on:
+  workflow_dispatch: # 手动触发工作流
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest # 使用默认的 Ubuntu runner
+
+    steps:
+      - name: Check initial disk usage
+        run: df -h # 检查初始磁盘使用情况
+
+      - name: Cleanup disk space
+        run: |
+          echo "Cleaning up disk space..."
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/share/swift
+          sudo apt-get clean
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/tmp/*
+          echo "Disk cleanup completed."
+
+      - name: Check final disk usage
+        run: df -h # 检查清理后的磁盘使用情况

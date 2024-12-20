@@ -43,6 +43,12 @@ jobs:
     - name: 准备结束
       uses: actions/checkout@v4
 
+    - name: 清理不必要的文件
+      run: |
+       echo "清理不必要的文件..."
+       rm -rf ${GITHUB_WORKSPACE}/openwrt/tmp/*
+       rm -rf ${GITHUB_WORKSPACE}/openwrt/logs/*
+
     - name: 检测文件和对比上游版本
       run: |
         cd ${GITHUB_WORKSPACE}

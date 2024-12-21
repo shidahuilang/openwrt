@@ -43,11 +43,6 @@ jobs:
     - name: 准备结束
       uses: actions/checkout@v4
 
-    - name: Clean up
-      run: |
-       rm -rf $HOME/.cache
-       rm -rf /tmp/*
-
 
     - name: 检测文件和对比上游版本
       run: |

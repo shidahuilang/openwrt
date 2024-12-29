@@ -101,7 +101,16 @@ jobs:
         ln -sf /${{ env.DIY_WORK }}/openwrt ${GITHUB_WORKSPACE}/openwrt
         cp -Rf ${GITHUB_WORKSPACE}/build ${GITHUB_WORKSPACE}/openwrt/build
         chmod -R +x ${GITHUB_WORKSPACE}/openwrt/build
-    
+
+    - name: 修改 feeds.conf.default
+      run: |
+        cd openwrt
+        # 使用 sed 修改 feeds.conf.default 文件
+        sed -i 's@src-git luci@# src-git luci@g' feeds.conf.default
+        sed -i 's@## src-git luci@src-git luci@g' feeds.conf.default
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        
     - name: 公 告
       run: |
         cd openwrt

@@ -179,12 +179,16 @@ jobs:
         
     - name: 修改 feeds.conf.default
       run: |
-        cd openwrt
-        # 使用 sed 修改 feeds.conf.default 文件
-        sed -i 's@src-git luci@# src-git luci@g' feeds.conf.default
-        sed -i 's@## src-git luci@src-git luci@g' feeds.conf.default
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
+       cd openwrt
+       # 判断是否为 LEDE 编译
+       if [ "$SOURCE_CODE" == "COOLSNOWWOLF" ]; then
+       echo "正在编译 LEDE，启用 luci feed"
+       # 使用 sed 修改 feeds.conf.default 文件
+       sed -i 's@src-git luci@# src-git luci@g' feeds.conf.default
+       sed -i 's@## src-git luci@src-git luci@g' feeds.conf.default
+       else
+       echo "不是 LEDE 编译，跳过 luci feed 配置"
+       fi
     
     - name: 公 告
       if: env.REPO_TOKEN

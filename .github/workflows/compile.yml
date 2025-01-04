@@ -115,7 +115,7 @@ jobs:
        elif [ "$SOURCE_CODE" == "IMMORTALWRT" ]; then
        echo "当前是 IMMORTALWRT 编译，跳过 luci feed 配置"
        else
-       echo "不是 COOLSNOWWOLF 或 IMMORTALWRT 编译，跳过 luci feed 配置"
+       echo "不是 COOLSNOWWOLF 编译，跳过 luci feed 配置"
        fi
         
     - name: 公 告

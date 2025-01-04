@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/Lede/relevance/start'
+      - 'build/Immortalwrt/relevance/start'
 
 env:
   GITHUB_LINK: https://github.com/${{github.repository}}
@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [Lede]
+        target: [Immortalwrt]
 
     steps:    
         
@@ -104,20 +104,18 @@ jobs:
 
     - name: 修改 feeds.conf.default
       run: |
-        cd openwrt
-        echo "当前 SOURCE_CODE 值是: $SOURCE_CODE"
-        # 判断是否为 COOLSNOWWOLF 编译
-        if [ "$SOURCE_CODE" == "COOLSNOWWOLF" ]; then
-          echo "正在编译 COOLSNOWWOLF，启用 luci feed"
-          # 使用 sed 修改 feeds.conf.default 文件
-          sed -i 's@src-git luci@# src-git luci@g' feeds.conf.default
-          sed -i 's@## src-git luci@src-git luci@g' feeds.conf.default
-        elif [ "$SOURCE_CODE" == "IMMORTALWRT" ]; then
-          echo "当前是 IMMORTALWRT 编译，跳过 luci feed 配置"
-        else
-          echo "未检测到 COOLSNOWWOLF 编译，跳过 luci feed 配置"
-        fi
-
+       cd openwrt
+       echo "当前 SOURCE_CODE 值是: $SOURCE_CODE"
+       # 判断是否为 COOLSNOWWOLF 编译
+       if [ "$SOURCE_CODE" == "COOLSNOWWOLF" ]; then
+       echo "正在编译 COOLSNOWWOLF，启用 luci feed"
+       # 使用 sed 修改 feeds.conf.default 文件
+       sed -i 's@src-git luci@# src-git luci@g' feeds.conf.default
+       sed -i 's@## src-git luci@src-git luci@g' feeds.conf.default
+       elif [ "$SOURCE_CODE" == "IMMORTALWRT" ]; then
+       echo "当前是 IMMORTALWRT 编译，跳过 luci feed 配置"
+       else
+       fi
         
     - name: 公 告
       run: |

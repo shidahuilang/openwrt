@@ -105,14 +105,17 @@ jobs:
     - name: 修改 feeds.conf.default
       run: |
        cd openwrt
-       # 判断是否为 LEDE 编译
+       echo "当前 SOURCE_CODE 值是: $SOURCE_CODE"
+       # 判断是否为 COOLSNOWWOLF 编译
        if [ "$SOURCE_CODE" == "COOLSNOWWOLF" ]; then
-       echo "正在编译 LEDE，启用 luci feed"
+       echo "正在编译 COOLSNOWWOLF，启用 luci feed"
        # 使用 sed 修改 feeds.conf.default 文件
        sed -i 's@src-git luci@# src-git luci@g' feeds.conf.default
        sed -i 's@## src-git luci@src-git luci@g' feeds.conf.default
+       elif [ "$SOURCE_CODE" == "IMMORTALWRT" ]; then
+       echo "当前是 IMMORTALWRT 编译，跳过 luci feed 配置"
        else
-       echo "不是 LEDE 编译，跳过 luci feed 配置"
+       echo "不是 COOLSNOWWOLF 或 IMMORTALWRT 编译，跳过 luci feed 配置"
        fi
         
     - name: 公 告

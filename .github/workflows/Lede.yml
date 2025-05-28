@@ -217,9 +217,9 @@ jobs:
         cd openwrt
         source ${BUILD_PATH}/common.sh && Diy_menu5
     
-    - name: 运行其他和SSH远程(make menuconfig)
-      id: info
-      uses: 281677160/common@need
+    - name: SSH远程连接（make menuconfig）
+      if: env.SSH_ACTION == 'true'
+      uses: danshui-git/debugger-action@main
         
 
     - name: 生成"${{ matrix.target }}"配置文件

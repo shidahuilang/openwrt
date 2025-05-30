@@ -217,9 +217,12 @@ jobs:
         cd openwrt
         source ${BUILD_PATH}/common.sh && Diy_menu5
     
-    - name: SSH远程连接（make menuconfig）
-      if: env.SSH_ACTION == 'true'
-      uses: danshui-git/debugger-action@main
+    - name: SSH远程连接服务器
+      uses: db-one/debugger-action@main
+      if: env.SSH_ACTIONS == 'true' || (github.event.inputs.SSH_ACTION == 'true')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         
 
     - name: 生成"${{ matrix.target }}"配置文件

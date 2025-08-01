@@ -215,7 +215,7 @@ jobs:
     - name: 清理Actions空间
       continue-on-error: true
       if: env.REPO_TOKEN
-      uses: small-5/delete-workflow-runs@main
+      uses: Mattraks/delete-workflow-runs@v2
       with:
         token: ${{ secrets.REPO_TOKEN }}
         repository: ${{ github.repository }}

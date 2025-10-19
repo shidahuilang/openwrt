@@ -14,6 +14,7 @@ on:
         type: choice
         options:
           - 'openwrt-23.05'
+          - 'openwrt-24.10'           
           - 'openwrt-21.02'
           - 'openwrt-18.06'
           - 'openwrt-18.06-k5.4'

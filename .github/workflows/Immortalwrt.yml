@@ -94,6 +94,9 @@ env:
   WX_TOKEN: ${{ secrets.WX_TOKEN }}
   CURL: ${{ secrets.CURL }} 
   TZ: Asia/Shanghai
+  LC_ALL: C
+  LANG: C
+  LANGUAGE: C
 
 jobs:
   build:
